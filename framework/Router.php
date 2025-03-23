@@ -7,9 +7,9 @@ use Framework\Request;
 class Router
 {
     protected static array $routes = [];
-    protected static $fallBack = VIEWPATH . '/not_found.html';
+    protected static $fallbackRoute;
 
-    public static function start(): void
+    public static function listen(): void
     {
         $target = explode(
             separator: '/',
@@ -19,10 +19,10 @@ class Router
         $route = $target[1];
         unset($target[0], $target[1]);
 
-        if (key_exists(key: $route, array: self::$routes)) {
+        if (key_exists(key: $route, array: self::$routes) && !is_numeric($route)) {
             call_user_func_array(callback: self::$routes[$route], args: $target);
         } else {
-            require_once self::$fallBack;
+            call_user_func(self::$fallbackRoute);
         }
     }
 
@@ -31,6 +31,11 @@ class Router
         $route = str_replace(search: '/', replace: '', subject: $route);
         array_push(self::$routes, $route);
         self::$routes[$route] = $callback;
+    }
+
+    public static function fallback(callable $callback): void
+    {
+        self::$fallbackRoute = $callback;
     }
 
     public static function controller($controller, $id = null, $middleware = null): void
@@ -56,7 +61,7 @@ class Router
         } elseif ($method == 'DELETE' && method_exists(object_or_class: $controller, method: 'delete')) {
             $controller->delete($id);
         } else {
-            require_once self::$fallBack;
+            call_user_func(self::$fallbackRoute);
         }
 
         if (isset($middleware) && method_exists(object_or_class: $middleware, method: 'after')) {

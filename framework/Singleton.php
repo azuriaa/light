@@ -6,13 +6,13 @@ class Singleton
 {
     protected static array $instances = [];
 
-    public static function mount($service): mixed
+    public static function mount($class): mixed
     {
-        if (!array_key_exists(key: $service, array: self::$instances)) {
-            array_push(self::$instances, $service);
-            self::$instances[$service] = new $service;
+        if (!array_key_exists($class, self::$instances)) {
+            array_push(self::$instances, $class);
+            self::$instances[$class] = new $class;
         }
 
-        return self::$instances[$service];
+        return self::$instances[$class];
     }
 }

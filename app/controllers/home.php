@@ -8,6 +8,6 @@ class Home extends Controller
 {
     public function index(): void
     {
-        $this->view(file: 'home');
+        view('home');
     }
 }

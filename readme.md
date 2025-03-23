@@ -3,17 +3,17 @@ PHP MVC Framework minimalis.
 
 ## Prasyarat
 1. Server Apache dengan mod_rewrite
-2. PHP 8.1 ke atas
+2. PHP 8.4 ke atas
 
 ## Setup
 Front controller berada di ```public/index.php```. Ubah dan arahkan ke root folder project yang ditentukan jika perlu.
 
 ```php
 // misalnya
-require_once realpath(__DIR__ . '/../project-1/main.php');
+require_once '/../project-1/main.php';
 ```
 
-Lalu atur juga konfigurasi pada ```app/config/server.php``` jika diperlukan.
+Lalu atur juga konfigurasi pada ```main.php``` jika diperlukan.
 Saat environtment berubah, konfigurasi file tersebut juga perlu diubah.
 
 ```php
@@ -23,21 +23,16 @@ date_default_timezone_set(timezoneId: 'Asia/Jakarta');
 // Tampilkan/sembunyikan pesan error, set ke false jika mode production
 ini_set(option: 'display_errors', value: true);
 
-// Lokasi direktori untuk View, dapat dikustomisasi
-define(constant_name: 'VIEWPATH', value: ROOTPATH . 'app/views');
-
 // Pengaturan koneksi PDO database untuk Model
-array_push($_ENV, [
-  'DEFAULT_DATABASE' => [
+$_ENV['DB_DEFAULT'] = [
     'dsn' => 'mysql:dbname=test;host=localhost',
     'username' => 'root',
     'password' => '',
-  ],
-]);
+];
 ```
 
 ## Routing
-Route dapat diatur pada ```app/config/routes.php```.
+Route dapat diatur pada ```App/AppRouter.php```.
 
 ```php
 Router::add('/page', function () {
@@ -51,12 +46,16 @@ Router::add('/page-to-something', function () {
 Router::add('/page/to/something', function () {
     // salah, route akan dibaca "pagetosomething"
 });
+
+Router::add('/12', function () {
+    // salah, route hanya mendukung tipe string
+});
 ```
 
 Cara kerjanya adalah hanya sederhana, hanya mencocokkan string tanpa tanda slash "/", jadi kelemahanya tidak bisa meregister nama route dengan slash. Meski begitu string slash berikutnya akan dijadikan params callback route.
 Meskipun callback bisa diisi apapun, namun akan lebih baik jika diarahkan ke controller.
 
-Misalnya URL ```http://localhost/user/azuria```
+Misalnya URL ```http://localhost/user/example```
 
 ```php
 Router::add('/user', function ($id = null) {
@@ -64,7 +63,7 @@ Router::add('/user', function ($id = null) {
 });
 ```
 
-Hasilnya adalah route ```/user```, dan ```$id``` akan berisi ```azuria```.
+Hasilnya adalah route ```/user```, dan ```$id``` akan berisi ```example```.
 
 Router akan mencoba memanggil controller sesuai dengan request method.
 
@@ -76,11 +75,11 @@ Router akan mencoba memanggil controller sesuai dengan request method.
 
 ## Controller & View
 Controller adalah business logic dari aplikasi kita sedangkan
-View adalah template halaman HTML, yang defaultnya berada pada direktori ```app/views/```. Cara memanggilnya seperti di bawah ini.
+View adalah template halaman HTML, yang defaultnya berada pada direktori ```App/Views/```. Cara memanggilnya seperti di bawah ini.
 Misalnya mengirim data ```date``` secara dinamis dari controller untuk dirender pada view.
 
 ```php
-// app/controller/userController
+// App/Controller/UserController
 namespace App\Controllers;
 
 use Framework\Controller;
@@ -91,19 +90,19 @@ class UserController {
             'date' => date('d-m-Y')
         ];
 
-        $this->view('dashboard', $data);
+        view('dashboard', $data);
     }
 }
 
 ```
 
-Misalnya view berupa ```app/views/dashboard.php```:
+Misalnya view berupa ```App/Views/dashboard.php```:
 
 ```php
 <?= $date ?>
 ```
 
-Atau view berupa ```app/views/dashboard.html```:
+Atau view berupa ```App/Views/dashboard.html```:
 
 ```html
 {{ date }}
@@ -120,7 +119,7 @@ Misalnya, untuk membatasi akses dashboard dengan login session, maka perlu membu
 kurang lebih seperti di bawah ini.
 
 ```php
-// app/middlewares/dashboardMiddleware.php
+// App/Middlewares/DashboardMiddleware.php
 namespace App\Middlewares;
 
 class DashboardMiddleware
@@ -142,7 +141,7 @@ class DashboardMiddleware
 }
 ```
 
-Lalu dapat dipasangkan pada ```app/config/routes.php```.
+Lalu dapat dipasangkan pada ```App/AppRoute.php```.
 
 ```php
 // menggunakan controller loader
@@ -236,70 +235,9 @@ Kedua param ini akan diabaikan untuk pattern bool, date, email, ip dan url.
 
 ***Note**: Param min hanya akan bekerja jika param max juga diisi.*
 
-## Model
-
-Model digunakan untuk mereprentasikan suatu tabel di database.
-Misalnya membuat model untuk tabel user, maka buat file ```app/models/UserModel.php``` dan isi minimal seperti di bawah ini.
-
+## Koneksi Database
 ```php
-// app/models/userModel.php
-namespace App\Models;
-
-use Framework\Model;
-
-class UserModel extends Model
-{
-    public string $table = 'user'; // nama tabel di database
-    public string $primaryKey = 'user_id'; // primary key tabel ini
-}
-```
-
-Cara menggunakanya dapat sebagai berikut, misalnya model dipanggil dari controller.
-
-```php
-// app/controllers/userController.php
-namespace App\Controllers;
-
-use Framework\Controller;
-// import model class nya
-use App\Models\UserModel;
-
-class UserController extends Controller {
-    public function index() {
-        // memanggil UserModel pada isi method controller
-        $user = $this->model(UserModel::class);
-
-        // SELECT * FROM user
-        $result = $user->findAll();
-
-        // SELECT * FROM user WHERE user_id = 19
-        $result = $user->find(19);
-
-        // INSERT INTO user (user_id, user_name) VALUES (01, 'user_01')
-        $data = [
-        'user_id' => 01,
-        'user_name' => 'user_01',
-        ];
-        $result = $user->insert($data);
-
-        // UPDATE user SET user_name = 'user_terabaikan' WHERE user_id = 4
-        $data = [
-        'user_name' => 'user_terabaikan',
-        ];
-        $result = $user->update($data, 4);
-
-        // DELETE FROM user WHERE user_id = 14
-        $result = $user->delete(14);
-    }
-}
-```
-
-
-
-#### Mengambil Koneksi Database
-```php
-// Mengambil koneksi database secara manual
-$db = $user->connect();
+$db = database();
 $db->prepare("SELECT * FROM `user` WHERE `id` = ?")->execute(['17']);
 
 $result = $db->fetchAll(PDO::FETCH_ASSOC);
@@ -308,38 +246,28 @@ $result = $db->fetchAll(PDO::FETCH_ASSOC);
 #### Menggunakan Database Berbeda
 Untuk menggunakan konfigurasi lebih dari 1 pada model,
 cukup tambahkan konfigurasi baru pada variabel ```$_ENV```
-pada ```app/config/server.php```
+pada ```main.php```
 
 ```php
-{
-// app/config/server.php
-array_push($_ENV, [
-    'DEFAULT_DATABASE' => [
-        'dsn' => 'mysql:dbname=test;host=localhost',
-        'username' => 'root',
-        'password' => '',
-    ],
-    'CONTOH_DATABASE' => [ // Misalnya ini akan digunakan 
-        'dsn' => 'mysql:dbname=example_db;host=192.168.0.2',
-        'username' => 'user',
-        'password' => 'user123',
-    ],
-]);
-}
+$_ENV['DB_DEFAULT'] = [
+    'dsn' => 'mysql:dbname=test;host=localhost',
+    'username' => 'root',
+    'password' => '',
+];
+
+// Misalnya ini akan digunakan 
+$_ENV['CONTOH_DATABASE'] = [
+    'dsn' => 'mysql:dbname=example_db;host=192.168.0.2',
+    'username' => 'user',
+    'password' => 'user123',
+];
+
 ```
 
-Lalu pada Model cukup ubah parameter confignya seperti di bawah.
+Lalu cukup ubah parameter databasenya seperti di bawah.
 
 ```php
-// app/models/ContohModel.php
-namespace App\Models;
-
-use Framework\Model;
-
-class ContohModel extends Model {
-    protected string $config = 'CONTOH_DATABASE'; // Ubah di sini
-
-}
+$db = database('CONTOH_DATABASE');
 ```
 
 
@@ -347,7 +275,6 @@ class ContohModel extends Model {
 Membuat instance suatu class menjadi singleton/shared instance.
 
 ```php
-// app/controllers/userController.php
 namespace UserController;
 
 use Framework\Controller
@@ -358,9 +285,8 @@ use App\Models\UserModel;
 class UserController {
     public function index() {
         // Process A, B, dan C mengusung instance yang sama
-        $processA = Singleton::mount(UserModel::class);;
-        $processB = Singleton::mount(UserModel::class);
-        $processC = $this->model(UserModel::class); // method model juga shared instance
+        $processA = Singleton::mount(UserModel::class);
+        $processB = Singleton::mount(UserModel::class); //shared instance
 
         // Process D dan E merupakan individual instance
         $processD = new UserModel;

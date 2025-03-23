@@ -1,4 +1,4 @@
 <?php
 
-require_once __DIR__ . '/../app/main.php';
-App\App::main();
+require_once __DIR__ . '/../main.php';
+main();
