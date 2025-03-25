@@ -82,15 +82,13 @@ Misalnya mengirim data ```date``` secara dinamis dari controller untuk dirender 
 // App/Controller/UserController
 namespace App\Controllers;
 
-use Framework\Controller;
-
 class UserController {
     public function index() {
         $data = [
             'date' => date('d-m-Y')
         ];
 
-        view('dashboard', $data);
+        echo view('dashboard', $data);
     }
 }
 
@@ -100,12 +98,6 @@ Misalnya view berupa ```App/Views/dashboard.php```:
 
 ```php
 <?= $date ?>
-```
-
-Atau view berupa ```App/Views/dashboard.html```:
-
-```html
-{{ date }}
 ```
 
 Maka data yang berasal dari controller akan ditampilkan.
@@ -278,7 +270,6 @@ Membuat instance suatu class menjadi singleton/shared instance.
 namespace UserController;
 
 use Framework\Controller
-// Import class nya
 use Framework\Singleton;
 use App\Models\UserModel;
 

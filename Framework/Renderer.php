@@ -7,6 +7,7 @@ class Renderer
   protected array $data;
   protected string $viewPath;
   protected string $file;
+  protected string $view;
 
   public function setup(string $viewPath, string $file, array $data = []): self
   {
@@ -17,25 +18,19 @@ class Renderer
     return $this;
   }
 
-  public function render(): void
+  public function render(): string
   {
-    if (file_exists($this->viewPath . $this->file . '.php')) {
+    if (file_exists("$this->viewPath/$this->file.php")) {
+      ob_start();
+
       extract($this->data);
-      require_once "$this->viewPath/$this->file.php";
-    } elseif (file_exists("$this->viewPath/$this->file.html")) {
-      $view = file_get_contents("$this->viewPath/$this->file.html");
-      $keys = array_keys($this->data);
-      foreach ($keys as $key) {
-        if (is_array($this->data[$key])) {
-          $this->data[$key] = json_encode($this->data[$key]);
-        }
+      include "$this->viewPath/$this->file.php";
 
-        $view = str_replace("{{ $key }}", $this->data[$key], $view);
-      }
-
-      echo $view;
+      $this->view = ob_get_clean();
     } else {
       throw new \Exception("File $this->file.php or $this->file.html does not exist.");
     }
+
+    return $this->view;
   }
 }

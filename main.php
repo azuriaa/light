@@ -23,10 +23,12 @@ function main(): void
   ];
 
   // Helper
-  function view(string $file, array $data = []): void
+  function view(string $file, array $data = []): string
   {
     $renderer = \Framework\Singleton::mount(Framework\Renderer::class);
-    $renderer->setup(viewPath: 'App/Views/', file: $file, data: $data)->render();
+    return $renderer
+      ->setup(viewPath: 'App/Views/', file: $file, data: $data)
+      ->render();
   }
 
   function database($config = 'DB_DEFAULT'): PDO|PDOStatement|null
@@ -35,7 +37,8 @@ function main(): void
   }
 
   // Start ...
-  date_default_timezone_set(timezoneId: 'Asia/Jakarta');
+  date_default_timezone_set('Asia/Jakarta');
+  header_remove('X-Powered-By');
   \App\AppRouter::register();
   \Framework\Router::listen();
 }

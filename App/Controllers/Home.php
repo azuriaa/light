@@ -2,12 +2,14 @@
 
 namespace App\Controllers;
 
-use Framework\Controller;
-
-class Home extends Controller
+class Home
 {
     public function index(): void
     {
-        view('home');
+        $data = [
+            'title' => 'Counter Example',
+        ];
+
+        echo view('home', $data);
     }
 }

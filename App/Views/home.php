@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 	<head>
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Counter Example Page</title>
+		<title><?= $title ?></title>
 		<style>
 			body {
 				font-family: Helvetica;
@@ -37,6 +38,7 @@
 			}
 		</style>
 	</head>
+
 	<body>
 		<div id="app"></div>
 		<script>
@@ -45,10 +47,10 @@
 
 				static html() {
 					return `
-            <h1>Counter Example</h1>
-			      <button onclick="Index.button()">Increment</button><br>
-			      <p id="value"></p>
-            `;
+						<h1><?= $title ?></h1>
+						<button onclick="Index.button()">Increment</button><br>
+						<p id="value"></p>
+						`;
 				}
 
 				static button() {
@@ -91,4 +93,5 @@
 			Router.start("app");
 		</script>
 	</body>
+
 </html>
