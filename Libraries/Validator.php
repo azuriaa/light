@@ -1,10 +1,10 @@
 <?php
 
-namespace Framework;
+namespace Libraries;
 
 class Validator
 {
-    public static function validate($input, string $pattern = 'alphanum', int|float $min = 0, int|float $max = 255): mixed
+    public function validate($input, string $pattern = 'alphanum', int|float $min = 0, int|float $max = 255): mixed
     {
         $options = [
             'options' => [
@@ -65,7 +65,7 @@ class Validator
         return $input;
     }
 
-    public static function batchValidate(array $values, array $rules): array
+    public function batchValidate(array $values, array $rules): array
     {
         foreach (array_keys($rules) as $key) {
             $rule = explode(separator: '|', string: $rules[$key]);

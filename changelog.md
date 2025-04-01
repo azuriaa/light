@@ -1,5 +1,8 @@
+## Light 3.1.0
+- Restruktur & refactoring
+
 ## Light 3.0
-- Light sekarang mengunakan struktur dan arsitektur baru
+- Light sekarang arsitektur baru
 
 ## Light 2.2.9
 - Default view hello world diganti ke counter app

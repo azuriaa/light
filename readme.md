@@ -1,19 +1,19 @@
 # Light
-PHP MVC Framework minimalis.
+PHP Project Boilerplate.
 
 ## Prasyarat
 1. Server Apache dengan mod_rewrite
 2. PHP 8.4 ke atas
 
 ## Setup
-Front controller berada di ```public/index.php```. Ubah dan arahkan ke root folder project yang ditentukan jika perlu.
+Front controller berada di ```/public/index.php```. Ubah dan arahkan ke root folder project yang ditentukan jika perlu.
 
 ```php
 // misalnya
-require_once '/../project-1/main.php';
+$path = '/../project-1/';
 ```
 
-Lalu atur juga konfigurasi pada ```main.php``` jika diperlukan.
+Lalu atur juga konfigurasi pada ```/Config/server.php``` jika diperlukan.
 Saat environtment berubah, konfigurasi file tersebut juga perlu diubah.
 
 ```php
@@ -23,7 +23,7 @@ date_default_timezone_set(timezoneId: 'Asia/Jakarta');
 // Tampilkan/sembunyikan pesan error, set ke false jika mode production
 ini_set(option: 'display_errors', value: true);
 
-// Pengaturan koneksi PDO database untuk Model
+// Pengaturan koneksi PDO database
 $_ENV['DB_DEFAULT'] = [
     'dsn' => 'mysql:dbname=test;host=localhost',
     'username' => 'root',
@@ -32,7 +32,7 @@ $_ENV['DB_DEFAULT'] = [
 ```
 
 ## Routing
-Route dapat diatur pada ```App/AppRouter.php```.
+Route dapat diatur pada ```/Config/router.php```.
 
 ```php
 Router::add('/page', function () {
@@ -75,26 +75,27 @@ Router akan mencoba memanggil controller sesuai dengan request method.
 
 ## Controller & View
 Controller adalah business logic dari aplikasi kita sedangkan
-View adalah template halaman HTML, yang defaultnya berada pada direktori ```App/Views/```. Cara memanggilnya seperti di bawah ini.
+View adalah template halaman HTML, yang defaultnya berada pada direktori ```/Views/```. Cara memanggilnya seperti di bawah ini.
 Misalnya mengirim data ```date``` secara dinamis dari controller untuk dirender pada view.
 
 ```php
-// App/Controller/UserController
-namespace App\Controllers;
+namespace Controllers;
 
-class UserController {
+use Libraries\Controller;
+
+class UserController extends Controller {
     public function index() {
         $data = [
             'date' => date('d-m-Y')
         ];
 
-        echo view('dashboard', $data);
+        echo $this->view('dashboard', $data);
     }
 }
 
 ```
 
-Misalnya view berupa ```App/Views/dashboard.php```:
+Misalnya view berupa ```/Views/dashboard.php```:
 
 ```php
 <?= $date ?>
@@ -104,15 +105,14 @@ Maka data yang berasal dari controller akan ditampilkan.
 
 ## Middleware
 Middleware adalah perantara request/response menuju business layer, tapi
-di PHP middleware biasanya hanya untuk membuat event sebelum dan sesudah mengakses controller yang berada pada direktori misalnya ```app/middlewares/```.
+di PHP middleware biasanya hanya untuk membuat event sebelum dan sesudah mengakses controller yang berada pada direktori misalnya ```/Middlewares/```.
 
 Misalnya, untuk membatasi akses dashboard dengan login session, maka perlu membuat file 
 ```DashboardMiddleware.php```
 kurang lebih seperti di bawah ini.
 
 ```php
-// App/Middlewares/DashboardMiddleware.php
-namespace App\Middlewares;
+namespace Middlewares;
 
 class DashboardMiddleware
 {
@@ -133,7 +133,7 @@ class DashboardMiddleware
 }
 ```
 
-Lalu dapat dipasangkan pada ```App/AppRoute.php```.
+Lalu dapat dipasangkan pada ```/Config/router.php```.
 
 ```php
 // menggunakan controller loader
@@ -150,13 +150,7 @@ Router::add('/dashboard', function ($id = null) {
 
 ## Validation
 
-Validation sederhana ini berguna untuk menangani input yang tidak diinginkan. Cara penggunaannya adalah sebagai berikut.
-
-#### Cara Memanggil Validator
-```php
-// import class nya
-use Framework\Validator;
-```
+Validation sederhana ini berguna untuk menangani input yang tidak diinginkan. Validator class akan dimuat secara default pada parent class Controller, cara penggunaannya adalah sebagai berikut.
 
 #### Validasi Single Data
 Berikut adalah cara melakukan validasi untuk 1 data.
@@ -171,7 +165,7 @@ try {
     // param #2 pattern
     // param #3 min
     // param #4 max
-    $luas = Validator::validate($data['luas'], 'float', 10, 100);
+    $luas = $this->validator->validate($data['luas'], 'float', 10, 100);
 
     echo "luas: $luas";
 } catch (\Exception $e) {
@@ -191,7 +185,7 @@ $data = [
 ];
 
 try {
-    $validated = Validator::batchValidate($data, [
+    $validated = $this->validator->batchValidate($data, [
         'name' => 'text',
         'value' => 'float|min:12.4 max:13',
         'id' => 'int|min:8 max:100',
@@ -228,17 +222,19 @@ Kedua param ini akan diabaikan untuk pattern bool, date, email, ip dan url.
 ***Note**: Param min hanya akan bekerja jika param max juga diisi.*
 
 ## Koneksi Database
+Database class juga secara default akan dimuat pada parent class Controller.
+
 ```php
-$db = database();
+$db = $this->database();
 $db->prepare("SELECT * FROM `user` WHERE `id` = ?")->execute(['17']);
 
-$result = $db->fetchAll(PDO::FETCH_ASSOC);
+$result = $db->fetchAll();
 ```
 
 #### Menggunakan Database Berbeda
-Untuk menggunakan konfigurasi lebih dari 1 pada model,
+Untuk menggunakan konfigurasi lebih dari 1,
 cukup tambahkan konfigurasi baru pada variabel ```$_ENV```
-pada ```main.php```
+pada ```/Config/server.php```
 
 ```php
 $_ENV['DB_DEFAULT'] = [
@@ -259,9 +255,10 @@ $_ENV['CONTOH_DATABASE'] = [
 Lalu cukup ubah parameter databasenya seperti di bawah.
 
 ```php
-$db = database('CONTOH_DATABASE');
+$db = $this->database('CONTOH_DATABASE');
 ```
 
+Setiap 1 konfigurasi akan selalu menggunakan koneksi database yang sama, jika memerlukan koneksi lebih dari satu untuk meningkatkan performa, maka buat konfigurasi baru dengan parameter yang sama.
 
 ## Singleton
 Membuat instance suatu class menjadi singleton/shared instance.
@@ -269,19 +266,19 @@ Membuat instance suatu class menjadi singleton/shared instance.
 ```php
 namespace UserController;
 
-use Framework\Controller
-use Framework\Singleton;
-use App\Models\UserModel;
+use Libraries\Controller;
+use Libraries\Singleton;
+use Services\UserMail;
 
 class UserController {
     public function index() {
         // Process A, B, dan C mengusung instance yang sama
-        $processA = Singleton::mount(UserModel::class);
-        $processB = Singleton::mount(UserModel::class); //shared instance
+        $processA = Singleton::mount(UserMail::class);
+        $processB = Singleton::mount(UserMail::class); //shared instance
 
         // Process D dan E merupakan individual instance
-        $processD = new UserModel;
-        $processE = new UserModel;
+        $processD = new UserMail;
+        $processE = new UserMail;
     }
 }
 ```

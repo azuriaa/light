@@ -1,15 +1,15 @@
 <?php
 
-namespace Framework;
+namespace Libraries;
 
-use Framework\Request;
+use Libraries\Request;
 
 class Router
 {
     protected static array $routes = [];
     protected static $fallbackRoute;
 
-    public static function listen(): void
+    public static function run(): void
     {
         $target = explode(
             separator: '/',

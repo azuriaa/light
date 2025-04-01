@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Controllers;
+namespace Controllers;
 
-class Home
+use Libraries\Controller;
+
+class Home extends Controller
 {
     public function index(): void
     {
@@ -10,6 +12,6 @@ class Home
             'title' => 'Counter Example',
         ];
 
-        echo view('home', $data);
+        echo $this->view('home', $data);
     }
 }
