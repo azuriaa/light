@@ -168,13 +168,13 @@ class Response
      */
     public function respond(array $data = [], int $statusCode = 200): void
     {
-        http_response_code(response_code: $statusCode);
-        self::setContentType(mime: 'application/json');
+        http_response_code($statusCode);
+        self::setContentType('application/json');
 
         if ($data != []) {
-            echo json_encode(value: $data);
+            echo json_encode($data);
         } else {
-            echo json_encode(value: [
+            echo json_encode([
                 'status' => self::getStatusCode(),
                 'message' => self::getReasonPhrase(),
             ]);
@@ -189,13 +189,13 @@ class Response
      */
     public function fail(array $data = [], int $statusCode = 400): void
     {
-        http_response_code(response_code: $statusCode);
-        self::setContentType(mime: 'application/json');
+        http_response_code($statusCode);
+        self::setContentType('application/json');
 
         if ($data != []) {
-            echo json_encode(value: $data);
+            echo json_encode($data);
         } else {
-            echo json_encode(value: [
+            echo json_encode([
                 'status' => self::getStatusCode(),
                 'error' => self::getReasonPhrase(),
             ]);
@@ -209,13 +209,13 @@ class Response
      */
     public function respondCreated(array $data = []): void
     {
-        http_response_code(response_code: 201);
-        self::setContentType(mime: 'application/json');
+        http_response_code(201);
+        self::setContentType('application/json');
 
         if ($data != []) {
-            echo json_encode(value: $data);
+            echo json_encode($data);
         } else {
-            echo json_encode(value: [
+            echo json_encode([
                 'status' => self::getStatusCode(),
                 'message' => self::getReasonPhrase(),
             ]);
@@ -229,13 +229,13 @@ class Response
      */
     public function respondNoContent(array $data = []): void
     {
-        http_response_code(response_code: 204);
-        self::setContentType(mime: 'application/json');
+        http_response_code(204);
+        self::setContentType('application/json');
 
         if ($data != []) {
-            echo json_encode(value: $data);
+            echo json_encode($data);
         } else {
-            echo json_encode(value: [
+            echo json_encode([
                 'status' => self::getStatusCode(),
                 'message' => self::getReasonPhrase(),
             ]);
@@ -249,13 +249,13 @@ class Response
      */
     public function failUnauthorized(array $data = []): void
     {
-        http_response_code(response_code: 401);
-        self::setContentType(mime: 'application/json');
+        http_response_code(401);
+        self::setContentType('application/json');
 
         if ($data != []) {
-            echo json_encode(value: $data);
+            echo json_encode($data);
         } else {
-            echo json_encode(value: [
+            echo json_encode([
                 'status' => self::getStatusCode(),
                 'error' => self::getReasonPhrase(),
             ]);
@@ -269,13 +269,13 @@ class Response
      */
     public function failForbidden(array $data = []): void
     {
-        http_response_code(response_code: 403);
-        self::setContentType(mime: 'application/json');
+        http_response_code(403);
+        self::setContentType('application/json');
 
         if ($data != []) {
-            echo json_encode(value: $data);
+            echo json_encode($data);
         } else {
-            echo json_encode(value: [
+            echo json_encode([
                 'status' => self::getStatusCode(),
                 'error' => self::getReasonPhrase(),
             ]);
@@ -289,13 +289,13 @@ class Response
      */
     public function failNotFound(array $data = []): void
     {
-        http_response_code(response_code: 404);
-        self::setContentType(mime: 'application/json');
+        http_response_code(404);
+        self::setContentType('application/json');
 
         if ($data != []) {
-            echo json_encode(value: $data);
+            echo json_encode($data);
         } else {
-            echo json_encode(value: [
+            echo json_encode([
                 'status' => self::getStatusCode(),
                 'error' => self::getReasonPhrase(),
             ]);
@@ -309,13 +309,13 @@ class Response
      */
     public function failResourceExists(array $data = []): void
     {
-        http_response_code(response_code: 409);
-        self::setContentType(mime: 'application/json');
+        http_response_code(409);
+        self::setContentType('application/json');
 
         if ($data != []) {
-            echo json_encode(value: $data);
+            echo json_encode($data);
         } else {
-            echo json_encode(value: [
+            echo json_encode([
                 'status' => self::getStatusCode(),
                 'error' => self::getReasonPhrase(),
             ]);
@@ -329,13 +329,13 @@ class Response
      */
     public function failResourceGone(array $data = []): void
     {
-        http_response_code(response_code: 410);
-        self::setContentType(mime: 'application/json');
+        http_response_code(410);
+        self::setContentType('application/json');
 
         if ($data != []) {
-            echo json_encode(value: $data);
+            echo json_encode($data);
         } else {
-            echo json_encode(value: [
+            echo json_encode([
                 'status' => self::getStatusCode(),
                 'error' => self::getReasonPhrase(),
             ]);
@@ -349,13 +349,13 @@ class Response
      */
     public function failTooManyRequests(array $data = []): void
     {
-        http_response_code(response_code: 429);
-        self::setContentType(mime: 'application/json');
+        http_response_code(429);
+        self::setContentType('application/json');
 
         if ($data != []) {
-            echo json_encode(value: $data);
+            echo json_encode($data);
         } else {
-            echo json_encode(value: [
+            echo json_encode([
                 'status' => self::getStatusCode(),
                 'error' => self::getReasonPhrase(),
             ]);
@@ -370,13 +370,13 @@ class Response
      */
     public function failServerError(array $data = []): void
     {
-        http_response_code(response_code: 500);
-        self::setContentType(mime: 'application/json');
+        http_response_code(500);
+        self::setContentType('application/json');
 
         if ($data != []) {
-            echo json_encode(value: $data);
+            echo json_encode($data);
         } else {
-            echo json_encode(value: [
+            echo json_encode([
                 'status' => self::getStatusCode(),
                 'error' => self::getReasonPhrase(),
             ]);

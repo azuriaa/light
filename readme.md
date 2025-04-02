@@ -5,7 +5,7 @@ PHP Project Boilerplate.
 1. Server Apache dengan mod_rewrite
 2. PHP 8.4 ke atas
 
-## Setup
+## Konfigurasi
 Front controller berada di ```/public/index.php```. Ubah dan arahkan ke root folder project yang ditentukan jika perlu.
 
 ```php
@@ -31,7 +31,7 @@ $_ENV['DB_DEFAULT'] = [
 ];
 ```
 
-## Routing
+## Router
 Route dapat diatur pada ```/Config/router.php```.
 
 ```php
@@ -153,29 +153,7 @@ Router::add('/dashboard', function ($id = null) {
 Validation sederhana ini berguna untuk menangani input yang tidak diinginkan. Validator class akan dimuat secara default pada parent class Controller, cara penggunaannya adalah sebagai berikut.
 
 #### Validasi Single Data
-Berikut adalah cara melakukan validasi untuk 1 data.
-
-```php
-$data = [
-    'luas' => 88.2,
-];
-
-try {
-    // param #1 data input
-    // param #2 pattern
-    // param #3 min
-    // param #4 max
-    $luas = $this->validator->validate($data['luas'], 'float', 10, 100);
-
-    echo "luas: $luas";
-} catch (\Exception $e) {
-    // hasilnya akan exception jika ada yang tidak valid
-    echo $e->getMessage();
-}
-```
-
-#### Validasi Array
-Selain cara di atas, cara validasi seperti di bawah ini juga dapat digunakan.
+Berikut adalah cara melakukan validasi data.
 
 ```php
 $data = [
@@ -185,7 +163,7 @@ $data = [
 ];
 
 try {
-    $validated = $this->validator->batchValidate($data, [
+    $validated = $this->validator->validate($data, [
         'name' => 'text',
         'value' => 'float|min:12.4 max:13',
         'id' => 'int|min:8 max:100',
@@ -197,7 +175,7 @@ try {
 ```
 
 #### Pattern
-Optional parameter untuk memilih pattern apa yang akan digunakan sebagai validator.
+Parameter untuk memilih pattern apa yang akan digunakan sebagai validator.
 
 - alpha
 - alphanum (default)
@@ -221,17 +199,67 @@ Kedua param ini akan diabaikan untuk pattern bool, date, email, ip dan url.
 
 ***Note**: Param min hanya akan bekerja jika param max juga diisi.*
 
-## Koneksi Database
-Database class juga secara default akan dimuat pada parent class Controller.
+## Model & Koneksi Database
+Model dibuat agar alur kerja interaksi ke database menjadi terpola dan terstruktur. Secara default berada pada direktori ```/Models/```, misalnya akan membuat model untuk tabel User maka akan dibuat file ```UserModel.php```
 
 ```php
-$db = $this->database();
-$db->prepare("SELECT * FROM `user` WHERE `id` = ?")->execute(['17']);
+namespace Models;
+
+use Libraries\Model;
+
+class UserModel extends Model
+{
+    protected string $table = 'users';
+    protected string $primaryKey = 'user_id';
+}
+```
+
+#### Memanggil Model
+Contoh penggunaan beberapa method model
+
+```php
+use Models\UserModel;
+
+$user = new UserModel;
+
+$user->getAll();
+// SELECT * FROM users
+
+$user->find(25);
+// SELECT * FROM users WHERE user_id = 25
+
+$user->insert([
+    'user_id' => 26,
+    'user_name' => 'ExampleUser',
+    'user_key' => '#@abc123',
+]);
+// INSERT INTO users (user_id, user_name, user_key)
+// VALUES (26, 'ExampleUser', '#@abc123')
+
+$user->update([
+    'user_name' => 'ExampleTestUser2',
+    'user_key' => 'aabb',
+], 26);
+// UPDATE users
+// SET user_name = 'ExampleTestUser2', user_key = 'aabb'
+// WHERE user_id = 26
+
+$user->delete(26);
+// DELETE FROM users WHERE user_id = 26
+```
+
+Kelima method di atas merupakan implementasi CRUD yang umum, selebihnya jika memerlukan query lebih kompleks dapat dilakukan dengan cara mengambil konfigurasi koneksinya saja dan menulis query secara manual
+
+```php
+$db = $user->connect();
+$db
+->prepare("SELECT * FROM users WHERE id >= ? ORDER BY user_name DESC")
+->execute(['17']);
 
 $result = $db->fetchAll();
 ```
 
-#### Menggunakan Database Berbeda
+#### Menggunakan Konfigurasi Berbeda
 Untuk menggunakan konfigurasi lebih dari 1,
 cukup tambahkan konfigurasi baru pada variabel ```$_ENV```
 pada ```/Config/server.php```
@@ -252,10 +280,19 @@ $_ENV['CONTOH_DATABASE'] = [
 
 ```
 
-Lalu cukup ubah parameter databasenya seperti di bawah.
+Lalu cukup ubah parameter confignya seperti di bawah.
 
 ```php
-$db = $this->database('CONTOH_DATABASE');
+namespace Models;
+
+use Libraries\Model;
+
+class UserModel extends Model
+{
+    protected string $table = 'users';
+    protected string $primaryKey = 'user_id';
+    protected string $config = 'CONTOH_DATABASE'; // <=== Di sini
+}
 ```
 
 Setiap 1 konfigurasi akan selalu menggunakan koneksi database yang sama, jika memerlukan koneksi lebih dari satu untuk meningkatkan performa, maka buat konfigurasi baru dengan parameter yang sama.

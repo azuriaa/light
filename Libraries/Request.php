@@ -22,25 +22,25 @@ class Request
      */
     public static function getRequestTarget(): string
     {
-        $target = isset($_SERVER['REQUEST_URI']) ? filter_var(value: $_SERVER['REQUEST_URI'], filter: FILTER_SANITIZE_URL) : '/';
+        $target = isset($_SERVER['REQUEST_URI']) ? filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL) : '/';
 
         if (isset($_SERVER['QUERY_STRING'])) {
             $target = str_replace(
-                search: '?' . filter_var(value: $_SERVER['QUERY_STRING'], filter: FILTER_SANITIZE_URL),
-                replace: '',
-                subject: $target,
+                '?' . filter_var($_SERVER['QUERY_STRING'], FILTER_SANITIZE_URL),
+                '',
+                $target,
             );
         }
 
         if ($_SERVER['SCRIPT_NAME'] != '/index.php') {
             $target = str_replace(
-                search: str_replace(
-                    search: '/index.php',
-                    replace: '',
-                    subject: $_SERVER['SCRIPT_NAME'],
+                str_replace(
+                    '/index.php',
+                    '',
+                    $_SERVER['SCRIPT_NAME'],
                 ),
-                replace: '',
-                subject: $target,
+                '',
+                $target,
             );
         }
 
@@ -136,7 +136,7 @@ class Request
      */
     public static function getBody(): bool|string
     {
-        return file_get_contents(filename: 'php://input');
+        return file_get_contents('php://input');
     }
 
     /**

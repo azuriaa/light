@@ -13,9 +13,9 @@ class Database
   {
     if (!isset(self::$dbh[$config])) {
       self::$dbh[$config] = new PDO(
-        dsn: $_ENV[$config]['dsn'],
-        username: $_ENV[$config]['username'],
-        password: $_ENV[$config]['password'],
+        $_ENV[$config]['dsn'],
+        $_ENV[$config]['username'],
+        $_ENV[$config]['password'],
       );
 
       self::$dbh[$config]->setAttribute(
@@ -27,8 +27,8 @@ class Database
     return self::$dbh[$config];
   }
 
-  public static function close(): void
+  public static function close(string $config): void
   {
-    self::$dbh = [];
+    self::$dbh[$config] = null;
   }
 }
