@@ -19,10 +19,10 @@ class Server
     // Logger
     error_reporting(E_ALL);
     ini_set('log_errors', true);
-    ini_set('error_log', ROOTPATH . date('Y-m-d') . '.log');
+    ini_set('error_log', ROOTPATH . 'Storage/Log/' . date('Y-m-d') . '.log');
 
     // Session
-    session_save_path(ROOTPATH);
+    session_save_path(ROOTPATH . 'Storage/Session/');
 
     // Header
     header_remove('X-Powered-By');

@@ -3,6 +3,7 @@
 namespace Libraries;
 
 use Libraries\Request;
+use Libraries\Singleton;
 
 class Router
 {
@@ -11,9 +12,10 @@ class Router
 
   public static function run(): void
   {
+    $request = Singleton::mount(Request::class);
     $target = explode(
       '/',
-      Request::getRequestTarget(),
+      $request->getRequestTarget(),
     );
 
     $route = $target[1];
@@ -40,8 +42,9 @@ class Router
 
   public static function controller($controller, $id = null, $middleware = null): void
   {
+    $request = Singleton::mount(Request::class);
     $controller = new $controller;
-    $method = Request::getMethod();
+    $method = $request->getMethod();
 
     if (isset($middleware) && method_exists($middleware, 'before')) {
       $middleware::before();

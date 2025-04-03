@@ -20,7 +20,7 @@ class Request
      *
      * @return string
      */
-    public static function getRequestTarget(): string
+    public function getRequestTarget(): string
     {
         $target = isset($_SERVER['REQUEST_URI']) ? filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL) : '/';
 
@@ -51,7 +51,7 @@ class Request
      * Retrieves the HTTP method of the request.
      * @return string Returns the request method.
      */
-    public static function getMethod(): string
+    public function getMethod(): string
     {
         return $_SERVER['REQUEST_METHOD'];
     }
@@ -62,7 +62,7 @@ class Request
      * The string MUST contain only the HTTP version number (e.g., "1.1", "1.0").
      * @return string HTTP protocol version.
      */
-    public static function getProtocolVersion(): string
+    public function getProtocolVersion(): string
     {
         return $_SERVER['SERVER_PROTOCOL'];
     }
@@ -91,7 +91,7 @@ class Request
      *                      key MUST be a header name, and each value MUST be an array of strings
      *                      for that header.
      */
-    public static function getHeaders(): array
+    public function getHeaders(): array
     {
         return getallheaders();
     }
@@ -104,9 +104,9 @@ class Request
      *              name using a string comparison. Returns false if
      *              no matching header name is found in the message.
      */
-    public static function hasHeader(string $name): bool
+    public function hasHeader(string $name): bool
     {
-        return isset(self::getHeaders()[$name]) ? true : false;
+        return isset($this->getHeaders()[$name]) ? true : false;
     }
 
     /**
@@ -123,9 +123,9 @@ class Request
      *                       header. If the header does not appear in the message, this method MUST
      *                       return an empty array.
      */
-    public static function getHeader(string $name): array
+    public function getHeader(string $name): array
     {
-        $header = self::getHeaders();
+        $header = $this->getHeaders();
         return isset($header[$name]) ? [$name => $header[$name]] : [];
     }
 
@@ -134,7 +134,7 @@ class Request
      * 
      * @return mixed
      */
-    public static function getBody(): bool|string
+    public function getBody(): bool|string
     {
         return file_get_contents('php://input');
     }
@@ -148,7 +148,7 @@ class Request
      * @param mixed $id
      * @return mixed
      */
-    public static function getVar($id = null): mixed
+    public function getVar($id = null): mixed
     {
         if (isset($id)) {
             return isset($_REQUEST[$id]) ? $_REQUEST[$id] : null;

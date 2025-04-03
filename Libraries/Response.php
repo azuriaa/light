@@ -9,7 +9,7 @@ class Response
      * 
      * see: https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
      */
-    protected static array $responseCodeList = [
+    protected array $responseCodeList = [
         200 => 'OK',
         201 => 'Created',
         202 => 'Accepted',
@@ -50,7 +50,7 @@ class Response
      * to understand and satisfy the request.
      * @return int Status code.
      */
-    public static function getStatusCode(): int
+    public function getStatusCode(): int
     {
         return http_response_code();
     }
@@ -65,9 +65,9 @@ class Response
      * status code.
      * @return string Reason phrase; must return an empty string if none present.
      */
-    public static function getReasonPhrase(): string
+    public function getReasonPhrase(): string
     {
-        return self::$responseCodeList[self::getStatusCode()];
+        return $this->responseCodeList[$this->getStatusCode()];
     }
 
     /**
@@ -76,7 +76,7 @@ class Response
      * The string MUST contain only the HTTP version number (e.g., "1.1", "1.0").
      * @return string HTTP protocol version.
      */
-    public static function getProtocolVersion(): string
+    public function getProtocolVersion(): string
     {
         return $_SERVER['SERVER_PROTOCOL'];
     }
@@ -105,7 +105,7 @@ class Response
      *                      key MUST be a header name, and each value MUST be an array of strings
      *                      for that header.
      */
-    public static function getHeaders(): array
+    public function getHeaders(): array
     {
         $headers = [];
         foreach (headers_list() as $values) {
@@ -124,9 +124,9 @@ class Response
      *              name using a string comparison. Returns false if
      *              no matching header name is found in the message.
      */
-    public static function hasHeader(string $name): bool
+    public function hasHeader(string $name): bool
     {
-        return isset(self::getHeaders()[$name]) ? true : false;
+        return isset($this->getHeaders()[$name]) ? true : false;
     }
 
     /**
@@ -143,9 +143,9 @@ class Response
      *                       header. If the header does not appear in the message, this method MUST
      *                       return an empty array.
      */
-    public static function getHeader(string $name): array
+    public function getHeader(string $name): array
     {
-        $header = self::getHeaders();
+        $header = $this->getHeaders();
         return isset($header[$name]) ? [$name => $header[$name]] : [];
     }
 
@@ -155,7 +155,7 @@ class Response
      * @param string $mime
      * @param string $charset
      */
-    public static function setContentType(string $mime, string $charset = 'UTF-8'): void
+    public function setContentType(string $mime, string $charset = 'UTF-8'): void
     {
         header(header: "Content-Type: $mime; charset=$charset");
     }
@@ -169,14 +169,14 @@ class Response
     public function respond(array $data = [], int $statusCode = 200): void
     {
         http_response_code($statusCode);
-        self::setContentType('application/json');
+        $this->setContentType('application/json');
 
         if ($data != []) {
             echo json_encode($data);
         } else {
             echo json_encode([
-                'status' => self::getStatusCode(),
-                'message' => self::getReasonPhrase(),
+                'status' => $this->getStatusCode(),
+                'message' => $this->getReasonPhrase(),
             ]);
         }
     }
@@ -190,14 +190,14 @@ class Response
     public function fail(array $data = [], int $statusCode = 400): void
     {
         http_response_code($statusCode);
-        self::setContentType('application/json');
+        $this->setContentType('application/json');
 
         if ($data != []) {
             echo json_encode($data);
         } else {
             echo json_encode([
-                'status' => self::getStatusCode(),
-                'error' => self::getReasonPhrase(),
+                'status' => $this->getStatusCode(),
+                'error' => $this->getReasonPhrase(),
             ]);
         }
     }
@@ -210,14 +210,14 @@ class Response
     public function respondCreated(array $data = []): void
     {
         http_response_code(201);
-        self::setContentType('application/json');
+        $this->setContentType('application/json');
 
         if ($data != []) {
             echo json_encode($data);
         } else {
             echo json_encode([
-                'status' => self::getStatusCode(),
-                'message' => self::getReasonPhrase(),
+                'status' => $this->getStatusCode(),
+                'message' => $this->getReasonPhrase(),
             ]);
         }
     }
@@ -230,14 +230,14 @@ class Response
     public function respondNoContent(array $data = []): void
     {
         http_response_code(204);
-        self::setContentType('application/json');
+        $this->setContentType('application/json');
 
         if ($data != []) {
             echo json_encode($data);
         } else {
             echo json_encode([
-                'status' => self::getStatusCode(),
-                'message' => self::getReasonPhrase(),
+                'status' => $this->getStatusCode(),
+                'message' => $this->getReasonPhrase(),
             ]);
         }
     }
@@ -250,14 +250,14 @@ class Response
     public function failUnauthorized(array $data = []): void
     {
         http_response_code(401);
-        self::setContentType('application/json');
+        $this->setContentType('application/json');
 
         if ($data != []) {
             echo json_encode($data);
         } else {
             echo json_encode([
-                'status' => self::getStatusCode(),
-                'error' => self::getReasonPhrase(),
+                'status' => $this->getStatusCode(),
+                'error' => $this->getReasonPhrase(),
             ]);
         }
     }
@@ -270,14 +270,14 @@ class Response
     public function failForbidden(array $data = []): void
     {
         http_response_code(403);
-        self::setContentType('application/json');
+        $this->setContentType('application/json');
 
         if ($data != []) {
             echo json_encode($data);
         } else {
             echo json_encode([
-                'status' => self::getStatusCode(),
-                'error' => self::getReasonPhrase(),
+                'status' => $this->getStatusCode(),
+                'error' => $this->getReasonPhrase(),
             ]);
         }
     }
@@ -290,14 +290,14 @@ class Response
     public function failNotFound(array $data = []): void
     {
         http_response_code(404);
-        self::setContentType('application/json');
+        $this->setContentType('application/json');
 
         if ($data != []) {
             echo json_encode($data);
         } else {
             echo json_encode([
-                'status' => self::getStatusCode(),
-                'error' => self::getReasonPhrase(),
+                'status' => $this->getStatusCode(),
+                'error' => $this->getReasonPhrase(),
             ]);
         }
     }
@@ -310,14 +310,14 @@ class Response
     public function failResourceExists(array $data = []): void
     {
         http_response_code(409);
-        self::setContentType('application/json');
+        $this->setContentType('application/json');
 
         if ($data != []) {
             echo json_encode($data);
         } else {
             echo json_encode([
-                'status' => self::getStatusCode(),
-                'error' => self::getReasonPhrase(),
+                'status' => $this->getStatusCode(),
+                'error' => $this->getReasonPhrase(),
             ]);
         }
     }
@@ -330,14 +330,14 @@ class Response
     public function failResourceGone(array $data = []): void
     {
         http_response_code(410);
-        self::setContentType('application/json');
+        $this->setContentType('application/json');
 
         if ($data != []) {
             echo json_encode($data);
         } else {
             echo json_encode([
-                'status' => self::getStatusCode(),
-                'error' => self::getReasonPhrase(),
+                'status' => $this->getStatusCode(),
+                'error' => $this->getReasonPhrase(),
             ]);
         }
     }
@@ -350,14 +350,14 @@ class Response
     public function failTooManyRequests(array $data = []): void
     {
         http_response_code(429);
-        self::setContentType('application/json');
+        $this->setContentType('application/json');
 
         if ($data != []) {
             echo json_encode($data);
         } else {
             echo json_encode([
-                'status' => self::getStatusCode(),
-                'error' => self::getReasonPhrase(),
+                'status' => $this->getStatusCode(),
+                'error' => $this->getReasonPhrase(),
             ]);
         }
     }
@@ -371,14 +371,14 @@ class Response
     public function failServerError(array $data = []): void
     {
         http_response_code(500);
-        self::setContentType('application/json');
+        $this->setContentType('application/json');
 
         if ($data != []) {
             echo json_encode($data);
         } else {
             echo json_encode([
-                'status' => self::getStatusCode(),
-                'error' => self::getReasonPhrase(),
+                'status' => $this->getStatusCode(),
+                'error' => $this->getReasonPhrase(),
             ]);
         }
     }

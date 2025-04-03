@@ -100,8 +100,38 @@ Misalnya view berupa ```/Views/dashboard.php```:
 ```php
 <?= $date ?>
 ```
+naka data yang berasal dari controller akan ditampilkan.
 
-Maka data yang berasal dari controller akan ditampilkan.
+#### Menerima Form Data
+Contoh form data pada view
+
+```html
+<form method="get">
+    Username:
+    <input type="text" name="username">
+    <button type="submit">Submit</button>
+</form>
+```
+input form dengan nama form ```username``` dapat diterima pada controller seperti di bawah
+
+```php
+$username = $this->getVar('username');
+```
+
+#### Menerima File
+Contoh form upload file pada view
+```html
+<form method="post" enctype="multipart/form-data">
+    File:
+    <input type="file" name="upload">
+    <button type="submit">Submit</button>
+</form>
+```
+file dengan nama form ```upload``` dapat diterima seperti di bawah
+```php
+$filename = $this->upload->save('upload');
+```
+```$filename``` akan berisi nama file pada direktori ```/Storage/Upload/```
 
 ## Middleware
 Middleware adalah perantara request/response menuju business layer, tapi
@@ -291,7 +321,7 @@ class UserModel extends Model
 {
     protected string $table = 'users';
     protected string $primaryKey = 'user_id';
-    protected string $config = 'CONTOH_DATABASE'; // <=== Di sini
+    protected string $config = 'CONTOH_DATABASE'; // <== Di sini
 }
 ```
 

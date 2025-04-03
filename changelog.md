@@ -1,4 +1,7 @@
-## Light 3.1.0
+## Light 3.2
+- Dukungan upload file langsung pada controller
+
+## Light 3.1
 - Restruktur & refactoring
 
 ## Light 3.0
