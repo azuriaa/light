@@ -351,16 +351,14 @@ class UserController {
 ```
 
 ## View
-View merupakan template HTML & Javascript yang ditampilkan ke client.
-
+Template HTML & Javascript yang di bind dengan data lalu dirender ke client.
 
 ### Template Engine
-Client-side templating engine.
 Saat ini modern web app sudah meninggalkan teknologi web dinamis dan beralih ke Single Page App (SPA), sehingga data dari controller tidak lagi dirender menggunakan 
 ```php
 <?= $date ?>
 ```
-lagi misalnya untuk menampilkan date dari controller. Kebanyakan data diambil menggunakan REST API dan dirender oleh browser. Disinilah peran template engine.
+lagi misalnya untuk menampilkan date dari controller. Kebanyakan data diambil menggunakan REST API dan dirender oleh browser. Disinilah peran template engine, merubah yang awalnya server-side rendering menjadi client-side rendering.
 
 #### Contoh
 ```javascript
@@ -438,7 +436,7 @@ engine.render(app, template, data);
 ```
 
 ### Hash Router
-Template engine tadi dapat juga dikombinasikan dengan client side router
+Template engine tadi dapat juga dikombinasikan dengan client-side router
 
 #### Contoh Lengkap
 ```html
@@ -611,6 +609,24 @@ Template engine dan router tadi juga dapat dikombinasikan dengan ini sehingga pe
 </html>
 ```
 
+#### Contoh Upload File
+Selain bentuk teks/json, file juga dapat dikirim
+```javascript
+// Dalam event handler atau komponen
+const fileInput = document.getElementById('avatar-upload');
+
+fileInput.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  
+  try {
+    const result = await api.upload('/users/123/avatar', { avatar: file });
+    console.log('Upload berhasil:', result);
+  } catch (error) {
+    console.error('Upload gagal:', error);
+  }
+});
+```
+
 #### Fitur
 Konfigurasi Fleksibel:
 - Base URL yang dapat dikonfigurasi
@@ -627,3 +643,4 @@ Response Handling:
 
 HTTP Methods Lengkap:
 - GET, POST, PUT, PATCH, DELETE
+

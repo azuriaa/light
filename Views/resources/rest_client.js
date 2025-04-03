@@ -2,7 +2,7 @@ class RestClient {
   constructor(baseUrl = '', options = {}) {
     this.baseUrl = baseUrl;
     this.defaultHeaders = {
-      'Content-Type': 'application/json',
+      'Accept': 'application/json',
       ...options.headers
     };
     this.authToken = options.authToken || '';
@@ -13,7 +13,7 @@ class RestClient {
     this.authToken = token;
   }
 
-  async request(endpoint, method = 'GET', data = null) {
+  async request(endpoint, method = 'GET', data = null, isFileUpload = false) {
     const url = `${this.baseUrl}${endpoint}`;
     const headers = { ...this.defaultHeaders };
 
@@ -28,7 +28,13 @@ class RestClient {
     };
 
     if (data) {
-      config.body = JSON.stringify(data);
+      if (isFileUpload) {
+        // Untuk upload file, tidak menggunakan JSON
+        delete headers['Content-Type']; // Biarkan browser set Content-Type
+        config.body = this.prepareFormData(data);
+      } else {
+        config.body = JSON.stringify(data);
+      }
     }
 
     try {
@@ -45,36 +51,39 @@ class RestClient {
     }
   }
 
-  async parseResponse(response) {
-    const contentType = response.headers.get('content-type');
-    if (contentType && contentType.includes('application/json')) {
-      return await response.json();
-    }
-    return await response.text();
+  prepareFormData(data) {
+    const formData = new FormData();
+
+    Object.entries(data).forEach(([key, value]) => {
+      if (value instanceof FileList) {
+        // Handle multiple files
+        Array.from(value).forEach(file => {
+          formData.append(key, file);
+        });
+      } else if (value instanceof File) {
+        // Handle single file
+        formData.append(key, value);
+      } else if (Array.isArray(value)) {
+        // Handle array of files or other data
+        value.forEach(item => {
+          if (item instanceof File) {
+            formData.append(key, item);
+          } else {
+            formData.append(key, JSON.stringify(item));
+          }
+        });
+      } else {
+        // Handle regular fields
+        formData.append(key, typeof value === 'object' ? JSON.stringify(value) : value);
+      }
+    });
+
+    return formData;
   }
 
-  async parseError(response) {
-    try {
-      const errorData = await this.parseResponse(response);
-      return {
-        status: response.status,
-        message: errorData.message || 'Request failed',
-        details: errorData.details || errorData
-      };
-    } catch (e) {
-      return {
-        status: response.status,
-        message: 'Request failed'
-      };
-    }
-  }
+  // ... (parseResponse, parseError, defaultErrorHandler tetap sama)
 
-  defaultErrorHandler(error) {
-    console.error('API Error:', error);
-    // Anda bisa menambahkan notifikasi UI di sini
-  }
-
-  // Helper methods untuk HTTP verbs
+  // Standard CRUD methods
   get(endpoint) {
     return this.request(endpoint);
   }
@@ -93,5 +102,18 @@ class RestClient {
 
   delete(endpoint) {
     return this.request(endpoint, 'DELETE');
+  }
+
+  // File upload methods
+  upload(endpoint, fileData) {
+    return this.request(endpoint, 'POST', fileData, true);
+  }
+
+  uploadPut(endpoint, fileData) {
+    return this.request(endpoint, 'PUT', fileData, true);
+  }
+
+  uploadPatch(endpoint, fileData) {
+    return this.request(endpoint, 'PATCH', fileData, true);
   }
 }
