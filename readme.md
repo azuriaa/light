@@ -73,7 +73,7 @@ Router akan mencoba memanggil controller sesuai dengan request method.
 - ```PUT``` atau ```PATCH``` akan memanggil method ```update($id)```
 - ```DELETE``` akan memanggil method ```delete($id)```
 
-## Controller & View
+## Controller
 Controller adalah business logic dari aplikasi kita sedangkan
 View adalah template halaman HTML, yang defaultnya berada pada direktori ```/Views/```. Cara memanggilnya seperti di bawah ini.
 Misalnya mengirim data ```date``` secara dinamis dari controller untuk dirender pada view.
@@ -102,7 +102,7 @@ Misalnya view berupa ```/Views/dashboard.php```:
 ```
 naka data yang berasal dari controller akan ditampilkan.
 
-#### Menerima Form Data
+### Menerima Form Data
 Contoh form data pada view
 
 ```html
@@ -118,7 +118,7 @@ input form dengan nama form ```username``` dapat diterima pada controller sepert
 $username = $this->getVar('username');
 ```
 
-#### Menerima File
+### Menerima File
 Contoh form upload file pada view
 ```html
 <form method="post" enctype="multipart/form-data">
@@ -178,11 +178,11 @@ Router::add('/dashboard', function ($id = null) {
 });
 ```
 
-## Validation
+## Validator
 
-Validation sederhana ini berguna untuk menangani input yang tidak diinginkan. Validator class akan dimuat secara default pada parent class Controller, cara penggunaannya adalah sebagai berikut.
+Validasi sederhana ini berguna untuk menangani input yang tidak diinginkan. Validator class akan dimuat secara default pada parent class Controller, cara penggunaannya adalah sebagai berikut.
 
-#### Validasi Single Data
+### Validasi Data
 Berikut adalah cara melakukan validasi data.
 
 ```php
@@ -204,7 +204,7 @@ try {
 
 ```
 
-#### Pattern
+### Pattern
 Parameter untuk memilih pattern apa yang akan digunakan sebagai validator.
 
 - alpha
@@ -219,7 +219,7 @@ Parameter untuk memilih pattern apa yang akan digunakan sebagai validator.
 - text
 - url
 
-#### Min & Max
+### Min & Max
 Optional untuk batasan suatu data input, jika berupa string maka menjadi panjang string jika integer atau float akan menjadi nilai minimal atau maksimum suatu bilangan.
 
 - nilai min dapat berupa integer atau float (default 0)
@@ -229,7 +229,7 @@ Kedua param ini akan diabaikan untuk pattern bool, date, email, ip dan url.
 
 ***Note**: Param min hanya akan bekerja jika param max juga diisi.*
 
-## Model & Koneksi Database
+## Model
 Model dibuat agar alur kerja interaksi ke database menjadi terpola dan terstruktur. Secara default berada pada direktori ```/Models/```, misalnya akan membuat model untuk tabel User maka akan dibuat file ```UserModel.php```
 
 ```php
@@ -244,7 +244,7 @@ class UserModel extends Model
 }
 ```
 
-#### Memanggil Model
+### Memanggil Model
 Contoh penggunaan beberapa method model
 
 ```php
@@ -289,7 +289,7 @@ $db
 $result = $db->fetchAll();
 ```
 
-#### Menggunakan Konfigurasi Berbeda
+### Menggunakan Konfigurasi Berbeda
 Untuk menggunakan konfigurasi lebih dari 1,
 cukup tambahkan konfigurasi baru pada variabel ```$_ENV```
 pada ```/Config/server.php```
@@ -349,3 +349,280 @@ class UserController {
     }
 }
 ```
+
+## View
+View merupakan template HTML & Javascript yang ditampilkan ke client.
+
+
+### Template Engine
+Client-side templating engine.Saat ini modern web app sudah meninggalkan teknologi web dinamis dan beralih ke Single Page App (SPA), sehingga data dari controller tidak lagi dirender menggunakan 
+```php
+<?= $date ?>
+```
+lagi misalnya untuk menampilkan date dari controller. Kebanyakan data diambil menggunakan REST API dan dirender oleh browser. Disinilah peran template engine.
+
+#### Contoh
+```javascript
+<?php include 'resources/template_engine.js' ?>
+
+const engine = new TemplateEngine();
+
+// Register component
+engine.registerComponent('UserCard', `
+  <div class="card">
+    <h3>{{user.name}}</h3>
+    <p>{{user.email}}</p>
+    {{slot}}
+  </div>
+`);
+
+// Template dengan semua fitur
+const template = `
+  @if users.length
+    @foreach users as user
+      @component UserCard(user: user)
+        <input value="bind:user.name.input">
+      @endcomponent
+    @endforeach
+  @else
+    <p>No users found</p>
+  @endif
+`;
+
+// Data
+const data = {
+  users: [
+    { name: "Alice", email: "alice@example.com" },
+    { name: "Bob", email: "bob@example.com" }
+  ]
+};
+
+// Render ke DOM
+const app = document.getElementById('app');
+engine.render(app, template, data);
+```
+
+#### Rendering
+```render(container, template, data)``` untuk update DOM
+```_renderToString()``` untuk render string saja
+
+#### Sistem Komponen
+```html
+@component ComponentName(arg: value)
+  Konten slot
+@endcomponent
+```
+
+#### Kondisional
+```html
+@if condition
+  Konten
+@elseif otherCondition
+  Konten lain  
+@else
+  Default
+@endif
+```
+
+#### Perulangan
+```html
+@foreach array as item
+  {{item.property}}
+@endforeach
+```
+
+#### Data Binding
+```html
+<input value="bind:property.input">
+```
+
+### Hash Router
+Template engine tadi dapat juga dikombinasikan dengan client side router
+
+#### Contoh Lengkap
+```php
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Aplikasi dengan Router</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    // Sisipkan template engine & router file
+    <?php include 'resources/template_engine.js' ?>
+    <?php include 'resources/hash_router.js' ?>
+
+    // Inisialisasi
+    const engine = new TemplateEngine();
+    const router = new HashRouter(engine, [
+      {
+        path: '/',
+        template: `
+          <h1>Beranda</h1>
+          <nav>
+            <a href="#/">Beranda</a>
+            <a href="#/about">Tentang</a>
+            <a href="#/users/1">User 1</a>
+          </nav>
+        `
+      },
+      {
+        path: '/about',
+        component: 'AboutPage'
+      },
+      {
+        path: '/users/:id',
+        data: ({id}) => ({
+          userId: id,
+          user: { name: `User ${id}`, email: `user${id}@example.com` }
+        }),
+        template: `
+          <h1>Profil Pengguna {{userId}}</h1>
+          <p>Nama: {{user.name}}</p>
+          <p>Email: {{user.email}}</p>
+          <input type="text" value="bind:user.name.input">
+        `
+      },
+      {
+        path: '404',
+        template: '<h1>Halaman tidak ditemukan</h1>'
+      }
+    ], document.getElementById('app'));
+
+    // Registrasi komponen
+    engine.registerComponent('AboutPage', `
+      <div>
+        <h1>Tentang Kami</h1>
+        <p>Ini adalah halaman tentang kami.</p>
+        <button onclick="router.navigate('/')">Kembali</button>
+      </div>
+    `);
+
+    // Ekspos router ke global untuk navigasi dari template
+    window.router = router;
+  </script>
+</body>
+</html>
+```
+
+#### Parameter Dinamis
+```javascript
+// Contoh rute dengan parameter
+{ path: '/users/:id', ... }
+// Akan cocok dengan #/users/1, #/users/42, dll.
+```
+
+#### Data Loading
+```javascript
+// Data provider bisa sync atau async
+data: (params) => ({ user: { name: 'Test' } })
+// atau
+data: (params) => fetch('/api/data').then(...)
+```
+
+#### Komponen Template
+```javascript
+// Gunakan komponen yang sudah diregistrasi
+{ path: '/about', component: 'AboutPage' }
+```
+
+#### Redirect
+```javascript
+// Alihkan ke rute lain
+{ path: '/old', redirect: '/new' }
+```
+
+#### Error Handling
+- Otomatis menampilkan halaman 404 jika rute tidak ditemukan
+
+### REST Client
+Template engine dan router tadi juga dapat dikombinasikan dengan ini sehingga pemanggilan API lebih ringkas dibandingkan manual menggunakan fetch.
+
+#### Contoh Lengkap
+```php
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Aplikasi dengan REST Client</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    // Menyisipkan file template engine, hash router, dan rest client
+    <?php include 'resources/template_engine.js' ?>
+    <?php include 'resources/hash_router.js' ?>
+    <?php include 'resources/rest_client.js' ?>
+
+    // Inisialisasi
+    const engine = new TemplateEngine();
+    const api = new RestClient('https://api.example.com/v1');
+    
+    const router = new HashRouter(engine, [
+      {
+        path: '/',
+        template: `
+          <h1>Daftar Produk</h1>
+          <button onclick="loadProducts()">Muat Produk</button>
+          <div id="product-list"></div>
+        `
+      },
+      {
+        path: '/products/:id',
+        data: async ({id}) => {
+          const product = await api.get(`/products/${id}`);
+          return { product };
+        },
+        template: `
+          <h1>{{product.name}}</h1>
+          <p>Harga: ${{product.price}}</p>
+          <button onclick="router.navigate('/')">Kembali</button>
+        `
+      }
+    ], document.getElementById('app'));
+
+    // Fungsi global untuk contoh
+    window.loadProducts = async () => {
+      try {
+        const products = await api.get('/products');
+        engine.render(
+          document.getElementById('product-list'),
+          `
+            @foreach products as product
+              <div>
+                <h3>{{product.name}}</h3>
+                <a href="#/products/{{product.id}}">Lihat Detail</a>
+              </div>
+            @endforeach
+          `,
+          { products }
+        );
+      } catch (error) {
+        alert(`Gagal memuat produk: ${error.message}`);
+      }
+    };
+
+    // Ekspos ke global
+    window.router = router;
+    window.api = api;
+  </script>
+</body>
+</html>
+```
+
+#### Fitur
+Konfigurasi Fleksibel:
+- Base URL yang dapat dikonfigurasi
+- Header default yang dapat disesuaikan
+- Error handler yang dapat disesuaikan
+
+Manajemen Auth:
+- Dukungan untuk token otentikasi
+- Mudah diupdate dengan ```setAuthToken()```
+
+Response Handling:
+- Otomatis parsing JSON response
+- Error handling yang konsisten
+
+HTTP Methods Lengkap:
+- GET, POST, PUT, PATCH, DELETE
