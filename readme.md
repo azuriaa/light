@@ -355,7 +355,8 @@ View merupakan template HTML & Javascript yang ditampilkan ke client.
 
 
 ### Template Engine
-Client-side templating engine.Saat ini modern web app sudah meninggalkan teknologi web dinamis dan beralih ke Single Page App (SPA), sehingga data dari controller tidak lagi dirender menggunakan 
+Client-side templating engine.
+Saat ini modern web app sudah meninggalkan teknologi web dinamis dan beralih ke Single Page App (SPA), sehingga data dari controller tidak lagi dirender menggunakan 
 ```php
 <?= $date ?>
 ```
@@ -440,7 +441,7 @@ engine.render(app, template, data);
 Template engine tadi dapat juga dikombinasikan dengan client side router
 
 #### Contoh Lengkap
-```php
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -540,7 +541,7 @@ data: (params) => fetch('/api/data').then(...)
 Template engine dan router tadi juga dapat dikombinasikan dengan ini sehingga pemanggilan API lebih ringkas dibandingkan manual menggunakan fetch.
 
 #### Contoh Lengkap
-```php
+```html
 <!DOCTYPE html>
 <html>
 <head>
