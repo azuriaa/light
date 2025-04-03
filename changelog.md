@@ -6,6 +6,8 @@
 
 ## Light 3.0
 - Light sekarang arsitektur baru
+- Pengurangan fitur dari full-featured framework ke minimal boilerplate
+- Peningkatan kualitas performa
 
 ## Light 2.2.9
 - Default view hello world diganti ke counter app
@@ -31,7 +33,13 @@
 - Database host tidak perlu dimasukkan ke env.json
 - Refactoring beberapa core project
 - Fix getHeader pada response & request
-- Perubahan arsitektur software yang mendukung procedural & object oriented
 - Dukungan database PDO
 - Tool untuk development Kint & Whoops
 - Dukungan helper untuk singleton instance
+
+## Light 2.0
+- Perubahan MVVM ke MVC
+- Perubahan semi procedural ke object-oeriented
+
+## Light 1.0
+- Initial MVVM project
