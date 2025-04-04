@@ -555,6 +555,9 @@ data: (params) => fetch('/api/data').then(...)
 ### REST Client
 Template engine dan router tadi juga dapat dikombinasikan dengan ini sehingga pemanggilan API lebih ringkas dibandingkan manual menggunakan fetch.
 
+#### Lokasi File
+```/Views/resources/rest_client.js```
+
 #### Contoh
 ```html
 <!DOCTYPE html>
@@ -628,9 +631,6 @@ Template engine dan router tadi juga dapat dikombinasikan dengan ini sehingga pe
 
 #### Contoh Upload File
 Selain bentuk teks/json, file juga dapat dikirim
-
-#### Lokasi File
-```/Views/resources/rest_client.js```
 
 ```javascript
 // Dalam event handler atau komponen
