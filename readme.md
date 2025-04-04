@@ -361,7 +361,7 @@ class UserController {
 ```
 
 ## View
-Template HTML & Javascript yang di bind dengan data lalu dirender ke client.
+Template HTML & JavaScript yang di bind data lalu dirender ke client.
 
 ### Template Engine
 Saat ini modern web app sudah meninggalkan teknologi web dinamis dan beralih ke Single Page App (SPA), sehingga data dari controller tidak lagi dirender menggunakan
@@ -665,8 +665,8 @@ Response Handling:
 HTTP Methods Lengkap:
 - GET, POST, PUT, PATCH, DELETE
 
-### Elegant CSS Frammework
-Style CSS yang dirangkum menjadi 1 file javascript
+### Elegant Framework
+Agar tampilan web terlihat modern, rapi dan elegan, salah satu cara yang umum digunakan adalah menggunakan style. Di sini, kumpulan styling dasar yang umum digunakan sudah disediakan dalam bentuk framework
 
 #### Lokasi File
 ``` /Views/resources/elegant_framework.js ```
@@ -745,4 +745,4 @@ Responsive Design
 - Bekerja di semua ukuran layar
 
 Easy Theming
-- Warna dapat disesuaikan melalui variabel CSS
+- Warna dapat disesuaikan melalui variabel
