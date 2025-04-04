@@ -1,8 +1,9 @@
 # Light
-PHP Project Boilerplate.
+
+PHP Boilerplate.
 
 ## Daftar Isi
-1. [Prasyarat](#prasyarat)
+1. [Persyaratan Sistem](#persyaratan-sistem)
 2. [Konfigurasi](#konfigurasi)
 3. [Router](#router)
 4. [Middleware](#middleware)
@@ -11,11 +12,13 @@ PHP Project Boilerplate.
 7. [Singleton](#singleton)
 8. [View](#view)
 
-##  Prasyarat
+##  Persyaratan Sistem
+
 1. Server Apache dengan mod_rewrite
 2. PHP 8.4 ke atas
 
 ## Konfigurasi
+
 Front controller berada di ```/public/index.php```. Ubah dan arahkan ke root folder project yang ditentukan jika perlu.
 
 ```php
@@ -84,7 +87,8 @@ Router akan mencoba memanggil controller sesuai dengan request method.
 - ```DELETE``` akan memanggil method ```delete($id)```
 
 ## Controller
-Controller adalah business logic dari aplikasi kita sedangkan
+
+Controller adalah inti logic dari aplikasi kita sedangkan
 View adalah template halaman HTML, yang defaultnya berada pada direktori ```/Views/```. Cara memanggilnya seperti di bawah ini.
 Misalnya mengirim data ```date``` secara dinamis dari controller untuk dirender pada view.
 
@@ -110,9 +114,11 @@ Misalnya view berupa ```/Views/dashboard.php```:
 ```php
 <?= $date ?>
 ```
-naka data yang berasal dari controller akan ditampilkan.
+
+data dari controller akan ditampilkan.
 
 ### Menerima Form Data
+
 Contoh form data pada view
 
 ```html
@@ -122,6 +128,7 @@ Contoh form data pada view
     <button type="submit">Submit</button>
 </form>
 ```
+
 input form dengan nama form ```username``` dapat diterima pada controller seperti di bawah
 
 ```php
@@ -129,7 +136,9 @@ $username = $this->getVar('username');
 ```
 
 ### Menerima File
+
 Contoh form upload file pada view
+
 ```html
 <form method="post" enctype="multipart/form-data">
     File:
@@ -144,6 +153,7 @@ $filename = $this->upload->save('upload');
 ```$filename``` akan berisi nama file pada direktori ```/Storage/Upload/```
 
 ## Middleware
+
 Middleware adalah perantara request/response menuju business layer, tapi
 di PHP middleware biasanya hanya untuk membuat event sebelum dan sesudah mengakses controller yang berada pada direktori misalnya ```/Middlewares/```.
 
@@ -190,9 +200,10 @@ Router::add('/dashboard', function ($id = null) {
 
 ## Validator
 
-Validasi sederhana ini berguna untuk menangani input yang tidak diinginkan. Validator class akan dimuat secara default pada parent class Controller, cara penggunaannya adalah sebagai berikut.
+Validasi sederhana berguna untuk menangani input yang tidak diinginkan. Validator class akan dimuat secara default pada parent class Controller, cara penggunaannya adalah sebagai berikut.
 
 ### Validasi Data
+
 Berikut adalah cara melakukan validasi data.
 
 ```php
@@ -215,6 +226,7 @@ try {
 ```
 
 ### Pattern
+
 Parameter untuk memilih pattern apa yang akan digunakan sebagai validator.
 
 - alpha
@@ -230,6 +242,7 @@ Parameter untuk memilih pattern apa yang akan digunakan sebagai validator.
 - url
 
 ### Min & Max
+
 Optional untuk batasan suatu data input, jika berupa string maka menjadi panjang string jika integer atau float akan menjadi nilai minimal atau maksimum suatu bilangan.
 
 - nilai min dapat berupa integer atau float (default 0)
@@ -240,6 +253,7 @@ Kedua param ini akan diabaikan untuk pattern bool, date, email, ip dan url.
 ***Note**: Param min hanya akan bekerja jika param max juga diisi.*
 
 ## Model
+
 Model dibuat agar alur kerja interaksi ke database menjadi terpola dan terstruktur. Secara default berada pada direktori ```/Models/```, misalnya akan membuat model untuk tabel User maka akan dibuat file ```UserModel.php```
 
 ```php
@@ -255,7 +269,8 @@ class UserModel extends Model
 ```
 
 ### Memanggil Model
-Contoh penggunaan beberapa method model
+
+Contoh penggunaan beberapa method model.
 
 ```php
 use Models\UserModel;
@@ -288,7 +303,7 @@ $user->delete(26);
 // DELETE FROM users WHERE user_id = 26
 ```
 
-Kelima method di atas merupakan implementasi CRUD yang umum, selebihnya jika memerlukan query lebih kompleks dapat dilakukan dengan cara mengambil konfigurasi koneksinya saja dan menulis query secara manual
+Kelima method di atas merupakan implementasi CRUD yang umum, selebihnya jika memerlukan query lebih kompleks dapat dilakukan dengan cara mengambil konfigurasi koneksinya saja dan menulis query secara manual.
 
 ```php
 $db = $user->connect();
@@ -300,9 +315,10 @@ $result = $db->fetchAll();
 ```
 
 ### Menggunakan Konfigurasi Berbeda
+
 Untuk menggunakan konfigurasi lebih dari 1,
 cukup tambahkan konfigurasi baru pada variabel ```$_ENV```
-pada ```/Config/server.php```
+pada ```/Config/server.php```.
 
 ```php
 $_ENV['DB_DEFAULT'] = [
@@ -338,6 +354,7 @@ class UserModel extends Model
 Setiap 1 konfigurasi akan selalu menggunakan koneksi database yang sama, jika memerlukan koneksi lebih dari satu untuk meningkatkan performa, maka buat konfigurasi baru dengan parameter yang sama.
 
 ## Singleton
+
 Membuat instance suatu class menjadi singleton/shared instance.
 
 ```php
@@ -361,388 +378,406 @@ class UserController {
 ```
 
 ## View
+
 Template HTML & JavaScript yang di bind data lalu dirender ke client.
 
-### Template Engine
-Saat ini modern web app sudah meninggalkan teknologi web dinamis dan beralih ke Single Page App (SPA), sehingga data dari controller tidak lagi dirender menggunakan
+### Elegant CSS Framework
+
+Elegant CSS Framework adalah framework CSS modern yang ringan dan elegan, dibangun dengan JavaScript untuk menginjeksi style secara otomatis. Framework ini menyediakan komponen siap pakai dengan desain yang konsisten.
+
+#### Lokasi Library
+
+```/Views/resources/elegant_framework.js```
+
+#### Load Library
+
+Tambahkan satu baris kode berikut di <head> HTML Anda:
 ```php
-<?= $date ?>
+<script><?php include 'resources/elegant_framework.js' ?></script>
 ```
-lagi misalnya untuk menampilkan date dari controller. Kebanyakan data diambil menggunakan REST API dan dirender oleh browser. Disinilah peran template engine, merubah yang awalnya server-side rendering menjadi client-side rendering.
 
-#### Lokasi File
-```/Views/resources/template_engine.js```
+#### Grid System
 
-#### Contoh
-```javascript
-// Menyisipkan template engine file
-<?php include 'resources/template_engine.js' ?>
+Membuat layout responsif dengan sistem grid 12 kolom.
 
-const engine = new TemplateEngine();
-
-// Register component
-engine.registerComponent('UserCard', `
-  <div class="card">
-    <h3>{{user.name}}</h3>
-    <p>{{user.email}}</p>
-    {{slot}}
+```html
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">Kolom 1 (6/12)</div>
+    <div class="col-md-6">Kolom 2 (6/12)</div>
   </div>
-`);
-
-// Template dengan semua fitur
-const template = `
-  @if users.length
-    @foreach users as user
-      @component UserCard(user: user)
-        <input value="bind:user.name.input">
-      @endcomponent
-    @endforeach
-  @else
-    <p>No users found</p>
-  @endif
-`;
-
-// Data
-const data = {
-  users: [
-    { name: "Alice", email: "alice@example.com" },
-    { name: "Bob", email: "bob@example.com" }
-  ]
-};
-
-// Render ke DOM
-const app = document.getElementById('app');
-engine.render(app, template, data);
+</div>
 ```
 
-#### Rendering
-```render(container, template, data)``` untuk update DOM
-```_renderToString()``` untuk render string saja
+Class yang tersedia:
 
-#### Sistem Komponen
+- ```col-1``` sampai ```col-12``` untuk lebar spesifik
+- ```col-md-*```, ```col-lg-*``` untuk breakpoint berbeda
+- ```col``` untuk pembagian otomatis
+
+#### Responsive Images
+
+Menampilkan gambar yang menyesuaikan dengan perangkat.
+
 ```html
-@component ComponentName(arg: value)
-  Konten slot
-@endcomponent
+<!-- Gambar dasar -->
+<img src="image.jpg" class="img-fluid" alt="Responsive">
+
+<!-- Gambar dengan aspect ratio 16:9 -->
+<div class="ratio ratio-16x9">
+  <img src="image.jpg" class="img-cover" alt="Cover">
+</div>
+
+<!-- Gallery -->
+<div class="gallery">
+  <img src="image1.jpg" alt="Photo 1">
+  <img src="image2.jpg" alt="Photo 2">
+</div>
 ```
 
-#### Kondisional
+Class yang tersedia:
+
+- ```img-fluid```: Gambar responsif dasar
+- ```img-cover```, img-contain: Penyesuaian gambar
+- ```img-thumbnail```, ```img-rounded```, ```img-circle```: Gaya gambar
+- ```ratio-*```: Kontrol aspek rasio (1x1, 4x3, 16x9, 21x9)
+
+#### Animation
+
+- ```fade-in```: Animasi fade in
+- ```rotate```: Animasi putar
+
+#### Button
+
 ```html
-@if condition
-  Konten
-@elseif otherCondition
-  Konten lain  
-@else
-  Default
-@endif
+<button class="btn btn-blue">Primary</button>
+<button class="btn btn-outline">Outline</button>
 ```
 
-#### Perulangan
+Varian Warna:
+
+- ```btn-blue```
+- ```btn-green```
+- ```btn-yellow```
+- ```btn-red```
+
+#### Card
+
 ```html
-@foreach array as item
-  {{item.property}}
-@endforeach
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Judul Card</h5>
+    <p>Konten card</p>
+  </div>
+</div>
 ```
 
-#### Data Binding
+#### Circular Progress
+
+Indikator progress berbentuk lingkaran dengan animasi halus.
+
+Penggunaan Dasar:
+
 ```html
-<input value="bind:property.input">
+<div class="circular-progress" data-circular-progress data-value="75"></div>
 ```
 
-### Hash Router
-Template engine tadi dapat juga dikombinasikan dengan client-side router
+Dengan Atribut:
 
-#### Lokasi File
-```/Views/resources/hash_router.js```
-
-#### Contoh
 ```html
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Aplikasi dengan Router</title>
-</head>
-<body>
-  <div id="app"></div>
-  <script>
-    // Sisipkan template engine & router file
-    <?php include 'resources/template_engine.js' ?>
-    <?php include 'resources/hash_router.js' ?>
+<div class="circular-progress" 
+     data-circular-progress
+     data-value="50"
+     data-max="100"
+     data-color="blue"
+     data-size="large">
+</div>
+```
 
-    // Inisialisasi
-    const engine = new TemplateEngine();
-    const router = new HashRouter(engine, [
-      {
-        path: '/',
-        template: `
-          <h1>Beranda</h1>
-          <nav>
-            <a href="#/">Beranda</a>
-            <a href="#/about">Tentang</a>
-            <a href="#/users/1">User 1</a>
-          </nav>
-        `
-      },
-      {
-        path: '/about',
-        component: 'AboutPage'
-      },
-      {
-        path: '/users/:id',
-        data: ({id}) => ({
-          userId: id,
-          user: { name: `User ${id}`, email: `user${id}@example.com` }
-        }),
-        template: `
-          <h1>Profil Pengguna {{userId}}</h1>
-          <p>Nama: {{user.name}}</p>
-          <p>Email: {{user.email}}</p>
-          <input type="text" value="bind:user.name.input">
-        `
-      },
-      {
-        path: '404',
-        template: '<h1>Halaman tidak ditemukan</h1>'
-      }
-    ], document.getElementById('app'));
+Dengan Teks:
 
-    // Registrasi komponen
-    engine.registerComponent('AboutPage', `
-      <div>
-        <h1>Tentang Kami</h1>
-        <p>Ini adalah halaman tentang kami.</p>
-        <button onclick="router.navigate('/')">Kembali</button>
+```html
+<div class="circular-progress" data-circular-progress data-value="65">
+  <span class="custom-text">65%</span>
+</div>
+```
+
+Indeterminate Progress (Spinner Loading):
+
+```html
+<div class="circular-progress" data-circular-progress data-indeterminate></div>
+```
+
+Varian Warna:
+
+- ```blue``` (default)
+- ```green```
+- ```yellow```
+- ```red```
+- ```beige```
+
+#### Dialog (Modal)
+
+```html
+<button class="btn btn-blue" data-toggle="dialog" data-target="#myDialog">
+  Buka Dialog
+</button>
+
+<div id="myDialog-backdrop" class="dialog-backdrop"></div>
+<div id="myDialog" class="dialog">
+  <div class="dialog-box">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <h5 class="dialog-title">Judul Dialog</h5>
+        <button class="dialog-close">&times;</button>
       </div>
-    `);
-
-    // Ekspos router ke global untuk navigasi dari template
-    window.router = router;
-  </script>
-</body>
-</html>
-```
-
-#### Parameter Dinamis
-```javascript
-// Contoh rute dengan parameter
-{ path: '/users/:id', ... }
-// Akan cocok dengan #/users/1, #/users/42, dll.
-```
-
-#### Data Loading
-```javascript
-// Data provider bisa sync atau async
-data: (params) => ({ user: { name: 'Test' } })
-// atau
-data: (params) => fetch('/api/data').then(...)
-```
-
-#### Komponen Template
-```javascript
-// Gunakan komponen yang sudah diregistrasi
-{ path: '/about', component: 'AboutPage' }
-```
-
-#### Redirect
-```javascript
-// Alihkan ke rute lain
-{ path: '/old', redirect: '/new' }
-```
-
-#### Error Handling
-- Otomatis menampilkan halaman 404 jika rute tidak ditemukan
-
-### REST Client
-Template engine dan router tadi juga dapat dikombinasikan dengan ini sehingga pemanggilan API lebih ringkas dibandingkan manual menggunakan fetch.
-
-#### Lokasi File
-```/Views/resources/rest_client.js```
-
-#### Contoh
-```html
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Aplikasi dengan REST Client</title>
-</head>
-<body>
-  <div id="app"></div>
-  <script>
-    // Menyisipkan file template engine, hash router, dan rest client
-    <?php include 'resources/template_engine.js' ?>
-    <?php include 'resources/hash_router.js' ?>
-    <?php include 'resources/rest_client.js' ?>
-
-    // Inisialisasi
-    const engine = new TemplateEngine();
-    const api = new RestClient('https://api.example.com/v1');
-    
-    const router = new HashRouter(engine, [
-      {
-        path: '/',
-        template: `
-          <h1>Daftar Produk</h1>
-          <button onclick="loadProducts()">Muat Produk</button>
-          <div id="product-list"></div>
-        `
-      },
-      {
-        path: '/products/:id',
-        data: async ({id}) => {
-          const product = await api.get(`/products/${id}`);
-          return { product };
-        },
-        template: `
-          <h1>{{product.name}}</h1>
-          <p>Harga: ${{product.price}}</p>
-          <button onclick="router.navigate('/')">Kembali</button>
-        `
-      }
-    ], document.getElementById('app'));
-
-    // Fungsi global untuk contoh
-    window.loadProducts = async () => {
-      try {
-        const products = await api.get('/products');
-        engine.render(
-          document.getElementById('product-list'),
-          `
-            @foreach products as product
-              <div>
-                <h3>{{product.name}}</h3>
-                <a href="#/products/{{product.id}}">Lihat Detail</a>
-              </div>
-            @endforeach
-          `,
-          { products }
-        );
-      } catch (error) {
-        alert(`Gagal memuat produk: ${error.message}`);
-      }
-    };
-
-    // Ekspos ke global
-    window.router = router;
-    window.api = api;
-  </script>
-</body>
-</html>
-```
-
-#### Contoh Upload File
-Selain bentuk teks/json, file juga dapat dikirim
-
-```javascript
-// Dalam event handler atau komponen
-const fileInput = document.getElementById('avatar-upload');
-
-fileInput.addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  
-  try {
-    const result = await api.upload('/users/123/avatar', { avatar: file });
-    console.log('Upload berhasil:', result);
-  } catch (error) {
-    console.error('Upload gagal:', error);
-  }
-});
-```
-
-#### Fitur Utama
-Konfigurasi Fleksibel:
-- Base URL yang dapat dikonfigurasi
-- Header default yang dapat disesuaikan
-- Error handler yang dapat disesuaikan
-
-Manajemen Auth:
-- Dukungan untuk token otentikasi
-- Mudah diupdate dengan ```setAuthToken()```
-
-Response Handling:
-- Otomatis parsing JSON response
-- Error handling yang konsisten
-
-HTTP Methods Lengkap:
-- GET, POST, PUT, PATCH, DELETE
-
-### Elegant Framework
-Agar tampilan web terlihat modern, rapi dan elegan, salah satu cara yang umum digunakan adalah menggunakan style. Di sini, kumpulan styling dasar yang umum digunakan sudah disediakan dalam bentuk framework
-
-#### Lokasi File
-``` /Views/resources/elegant_framework.js ```
-
-#### Contoh
-```html
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>My App</title>
-  <!-- Menyisipkan Elegant Framework -->
-  <script><?php include 'resources/elegant_framework.js' ?></script>
-</head>
-<body>
-  <!-- Contoh penggunaan komponen -->
-  <button class="btn btn-blue" data-toggle="dialog" data-target="#myDialog">
-    Open Dialog
-  </button>
-
-  <div class="dropdown">
-    <button class="dropdown-toggle">
-      Dropdown Menu
-    </button>
-    <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="#">Item 1</a></li>
-      <li><a class="dropdown-item" href="#">Item 2</a></li>
-    </ul>
-  </div>
-
-  <div class="circular-progress" data-circular-progress data-value="75"></div>
-
-  <!-- Dialog -->
-  <div id="myDialog-backdrop" class="dialog-backdrop"></div>
-  <div id="myDialog" class="dialog">
-    <div class="dialog-box">
-      <div class="dialog-content">
-        <div class="dialog-header">
-          <h5 class="dialog-title">Dialog Title</h5>
-          <button class="dialog-close">&times;</button>
-        </div>
-        <div class="dialog-body">
-          <p>Dialog content goes here</p>
-        </div>
+      <div class="dialog-body">
+        <p>Konten dialog</p>
       </div>
     </div>
   </div>
-
-  <script>
-    // Contoh penggunaan snackbar
-    setTimeout(() => {
-      ElegantSnackbar.show({
-        message: 'Action completed successfully!',
-        type: 'snackbar-green',
-        autoDismiss: 3000
-      });
-    }, 1000);
-  </script>
-</body>
-</html>
+</div>
 ```
 
-#### Fitur Utama
-Complete Component Set
-- Layout system (container, grid)
-- Typography
-- Buttons
-- Forms
-- Cards
-- Dropdowns
-- Dialogs (modals)
-- Snackbars/toasts
-- Circular progress indicators
+#### Snackbar/Toast
 
-Responsive Design
-- Bekerja di semua ukuran layar
+```javascript
+// Tampilkan snackbar
+ElegantSnackbar.show({
+  message: "Operasi berhasil!",
+  type: "snackbar-green",
+  autoDismiss: 3000
+});
+```
 
-Easy Theming
-- Warna dapat disesuaikan melalui variabel
+Tipe Snackbar:
+
+- ```snackbar-blue```
+- ```snackbar-green```
+- ```snackbar-yellow```
+- ```snackbar-red```
+
+#### spacing
+
+- ```mt-1``` sampai ```mt-5```: Margin top
+- ```mb-1``` sampai ```mb-5```: Margin bottom
+- ```p-1``` sampai ```p-5```: Padding
+
+#### Text Alignment
+
+- ```text-left```
+- ```text-center```
+- ```text-right```
+
+#### Customization
+
+Anda bisa menyesuaikan variabel CSS di dalam file JavaScript:
+
+```javascript
+:root {
+  --blue: #3498db;       // Warna primary
+  --border-radius: 4px;  // Border radius
+  // ... variabel lainnya
+}
+```
+
+### Single Page Aplication (SPA)
+
+Template engine, client-side router, dan REST client.
+
+#### Lokasi Library
+
+- Template Engine: ```/Views/resources/template_engine.js```
+- Hash Router: ```/Views/resources/hash_router.js```
+- REST Client: ```/Views/resources/rest_client.js```
+
+#### Load Library
+
+```php
+<script><?php include 'resources/template_engine.js' ?></script>
+<script><?php include 'resources/hash_router.js' ?></script>
+<script><?php include 'resources/rest_client.js' ?></script>
+```
+
+#### Inisialisasi
+
+```javascript
+// Buat instance TemplateEngine
+const engine = new TemplateEngine({
+  // Opsi konfigurasi (opsional)
+  delimiters: { start: '{{', end: '}}' },
+  bindPrefix: 'bind:'
+});
+
+// Buat instance REST Client
+const api = new RestClient('https://api.example.com', {
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest'
+  },
+  errorHandler: (error) => {
+    console.error('API Error:', error);
+    alert(`Error: ${error.message}`);
+  }
+});
+
+// Definisikan rute aplikasi
+const routes = [
+  {
+    path: '/',
+    template: '<h1>Halaman Utama</h1>'
+  },
+  // ... rute lainnya
+];
+
+// Buat instance router
+const router = new HashRouter(engine, routes, document.getElementById('app'));
+```
+
+#### Template Engine
+
+Sintaks Dasar:
+
+```html
+<!-- Variable -->
+<p>{{ user.name }}</p>
+
+<!-- Binding dua arah -->
+<input type="text" value="bind:user.name.input">
+
+<!-- Kondisional -->
+@if user.isAdmin
+  <p>Anda adalah admin</p>
+@else
+  <p>Anda adalah user biasa</p>
+@endif
+
+<!-- Perulangan -->
+@foreach products as product
+  <div>{{ product.name }}</div>
+@endforeach
+```
+
+Registrasi Komponen:
+
+```javascript
+engine.registerComponent('UserCard', `
+  <div class="card">
+    <h3>{{ user.name }}</h3>
+    <p>{{ user.email }}</p>
+    {{ slot }}
+  </div>
+`);
+```
+
+Penggunaan Komponen:
+
+```html
+@component UserCard(user: currentUser)
+  <p>Additional info here</p>
+@endcomponent
+```
+
+#### Hash Router
+
+Membuat Route:
+
+```javascript
+const routes = [
+  {
+    path: '/',
+    template: '<h1>Beranda</h1>'
+  },
+  {
+    path: '/about',
+    component: 'AboutPage' // Komponen yang sudah diregistrasi
+  },
+  {
+    path: '/users/:id',
+    data: async ({id}) => {
+      const user = await api.get(`/users/${id}`);
+      return { user };
+    },
+    template: `
+      <h1>{{ user.name }}</h1>
+      <p>{{ user.email }}</p>
+    `
+  },
+  {
+    path: '404',
+    template: '<h1>Halaman tidak ditemukan</h1>'
+  }
+];
+```
+
+Navigasi:
+
+```javascript
+// Navigasi dalam JavaScript
+router.navigate('/about');
+
+// Navigasi dalam template
+<a href="#/about">Tentang Kami</a>
+<button onclick="router.navigate('/contact')">Kontak</button>
+```
+
+#### REST Client
+
+Operasi Dasar:
+
+```javascript
+// GET
+const products = await api.get('/products');
+
+// POST
+const newUser = await api.post('/users', {
+  name: 'John',
+  email: 'john@example.com'
+});
+
+// PUT
+const updatedUser = await api.put('/users/123', {
+  name: 'John Updated'
+});
+
+// DELETE
+await api.delete('/users/123');
+```
+
+Upload File:
+
+```html
+// Form dengan file input
+<form onsubmit="uploadFile(event)">
+  <input type="file" id="file-upload">
+  <button type="submit">Upload</button>
+  <div bind:uploadStatus></div>
+</form>
+
+<script>
+  async function uploadFile(e) {
+    e.preventDefault();
+    const file = document.getElementById('file-upload').files[0];
+    
+    try {
+      const result = await api.upload('/documents', { file });
+      console.log('Upload berhasil:', result);
+    } catch (error) {
+      console.error('Upload gagal:', error);
+    }
+  }
+</script>
+```
+
+Error Handling:
+
+```javascript
+try {
+  const data = await api.get('/protected-route');
+} catch (error) {
+  if (error.status === 401) {
+    router.navigate('/login');
+  } else {
+    alert(`Error: ${error.message}`);
+  }
+}
+```
