@@ -1,4 +1,4 @@
-// Elegant CSS Framework - Complete Implementation
+// Elegant CSS Framework - Complete Implementation with Helvetica
 (function () {
   // =============================================
   // 1. STYLE INJECTION
@@ -8,7 +8,7 @@
   const style = document.createElement('style');
   style.id = 'elegant-css-framework';
 
-  // CSS content
+  // CSS content with only Helvetica font
   const cssContent = `
   :root {
     /* Color System */
@@ -22,9 +22,8 @@
     --red: #e74c3c;
     --light-blue: #3498db;
     
-    /* Typography */
-    --font-main: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
-    --font-secondary: 'Playfair Display', Georgia, serif;
+    /* Typography - Only Helvetica */
+    --font-main: 'Helvetica', Arial, sans-serif;
     
     /* Spacing & Effects */
     --border-radius: 4px;
@@ -53,7 +52,7 @@
 
   /* Typography */
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-secondary);
+    font-family: var(--font-main);
     font-weight: 600;
     margin-bottom: 1rem;
     line-height: 1.2;
@@ -85,10 +84,29 @@
     margin-left: auto;
   }
 
-  @media (min-width: 576px) { .container { max-width: 540px; } }
-  @media (min-width: 768px) { .container { max-width: 720px; } }
-  @media (min-width: 992px) { .container { max-width: 960px; } }
-  @media (min-width: 1200px) { .container { max-width: 1140px; } }
+  @media (min-width: 576px) {
+    .container {
+      max-width: 540px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .container {
+      max-width: 720px;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .container {
+      max-width: 960px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .container {
+      max-width: 1140px;
+    }
+  }
 
   .row {
     display: flex;
@@ -98,10 +116,56 @@
   }
 
   .col {
-    position: relative;
-    width: 100%;
+    flex: 1 0 0%;
+    min-width: 0;
     padding-right: 15px;
     padding-left: 15px;
+    margin-bottom: 20px;
+  }
+
+  /* Column size variants */
+  .col-1 { flex: 0 0 8.333%; max-width: 8.333%; }
+  .col-2 { flex: 0 0 16.667%; max-width: 16.667%; }
+  .col-3 { flex: 0 0 25%; max-width: 25%; }
+  .col-4 { flex: 0 0 33.333%; max-width: 33.333%; }
+  .col-5 { flex: 0 0 41.667%; max-width: 41.667%; }
+  .col-6 { flex: 0 0 50%; max-width: 50%; }
+  .col-7 { flex: 0 0 58.333%; max-width: 58.333%; }
+  .col-8 { flex: 0 0 66.667%; max-width: 66.667%; }
+  .col-9 { flex: 0 0 75%; max-width: 75%; }
+  .col-10 { flex: 0 0 83.333%; max-width: 83.333%; }
+  .col-11 { flex: 0 0 91.667%; max-width: 91.667%; }
+  .col-12 { flex: 0 0 100%; max-width: 100%; }
+
+  /* Responsive column classes */
+  @media (min-width: 768px) {
+    .col-md-1 { flex: 0 0 8.333%; max-width: 8.333%; }
+    .col-md-2 { flex: 0 0 16.667%; max-width: 16.667%; }
+    .col-md-3 { flex: 0 0 25%; max-width: 25%; }
+    .col-md-4 { flex: 0 0 33.333%; max-width: 33.333%; }
+    .col-md-5 { flex: 0 0 41.667%; max-width: 41.667%; }
+    .col-md-6 { flex: 0 0 50%; max-width: 50%; }
+    .col-md-7 { flex: 0 0 58.333%; max-width: 58.333%; }
+    .col-md-8 { flex: 0 0 66.667%; max-width: 66.667%; }
+    .col-md-9 { flex: 0 0 75%; max-width: 75%; }
+    .col-md-10 { flex: 0 0 83.333%; max-width: 83.333%; }
+    .col-md-11 { flex: 0 0 91.667%; max-width: 91.667%; }
+    .col-md-12 { flex: 0 0 100%; max-width: 100%; }
+  }
+
+  @media (min-width: 992px) {
+    .col-lg-1 { flex: 0 0 8.333%; max-width: 8.333%; }
+    .col-lg-2 { flex: 0 0 16.667%; max-width: 16.667%; }
+    .col-lg-3 { flex: 0 0 25%; max-width: 25%; }
+    .col-lg-4 { flex: 0 0 33.333%; max-width: 33.333%; }
+    .col-lg-5 { flex: 0 0 41.667%; max-width: 41.667%; }
+    .col-lg-6 { flex: 0 0 50%; max-width: 50%; }
+    .col-lg-7 { flex: 0 0 58.333%; max-width: 58.333%; }
+    .col-lg-8 { flex: 0 0 66.667%; max-width: 66.667%; }
+    .col-lg-9 { flex: 0 0 75%; max-width: 75%; }
+    .col-lg-10 { flex: 0 0 83.333%; max-width: 83.333%; }
+    .col-lg-11 { flex: 0 0 91.667%; max-width: 91.667%; }
+    .col-lg-12 { flex: 0 0 100%; max-width: 100%; }
   }
 
   /* Buttons */
@@ -181,7 +245,7 @@
 
   .card-title {
     margin-bottom: 0.75rem;
-    font-family: var(--font-secondary);
+    font-family: var(--font-main);
   }
 
   /* Forms */
@@ -308,7 +372,7 @@
     color: var(--blue);
   }
 
-  /* Dialog (formerly Modal) */
+  /* Dialog */
   .dialog-backdrop {
     position: fixed;
     top: 0;
@@ -382,7 +446,7 @@
 
   .dialog-title {
     margin-bottom: 0;
-    font-family: var(--font-secondary);
+    font-family: var(--font-main);
     font-size: 1.5rem;
     font-weight: 600;
   }
@@ -631,18 +695,92 @@
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
   }
+
+  /* Responsive Images */
+  .img-fluid {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .img-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .img-contain {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .img-thumbnail {
+    padding: 0.25rem;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius);
+    max-width: 100%;
+    height: auto;
+  }
+
+  .img-rounded {
+    border-radius: var(--border-radius);
+  }
+
+  .img-circle {
+    border-radius: 50%;
+  }
+
+  /* Aspect ratio containers */
+  .ratio {
+    position: relative;
+    width: 100%;
+  }
+
+  .ratio::before {
+    display: block;
+    content: "";
+    width: 100%;
+  }
+
+  .ratio-1x1::before { padding-top: 100%; }
+  .ratio-4x3::before { padding-top: 75%; }
+  .ratio-16x9::before { padding-top: 56.25%; }
+  .ratio-21x9::before { padding-top: 42.857%; }
+
+  .ratio > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Responsive image gallery */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .gallery img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .gallery img:hover {
+    transform: scale(1.02);
+  }
+
   `;
 
   // Add CSS to style element
   style.textContent = cssContent;
-
-  // Add font link to head
-  const fontLink = document.createElement('link');
-  fontLink.href = 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:wght@600&display=swap';
-  fontLink.rel = 'stylesheet';
-
-  // Add elements to head
-  document.head.appendChild(fontLink);
   document.head.appendChild(style);
 
   // =============================================

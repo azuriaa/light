@@ -2,36 +2,20 @@
 <html lang="en">
 
   <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Not Found</title>
-    <style>
-      body {
-        font-family: Helvetica;
-        text-align: center;
-        background-color: white;
-        margin: 0;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
-
-      h1 {
-        color: salmon;
-      }
-
-      p {
-        color: black;
-        opacity: 50%;
-      }
-    </style>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Not Found!</title>
+    <script>
+      <?php include 'resources/elegant_framework.js' ?>
+    </script>
   </head>
 
   <body>
-    <h1>Page Not Found</h1>
-    <p>The page you're looking for does not seem to exist.</p>
+    <div class="container mt-5 mb-2">
+      <h1 style="color: var(--yellow)">Not Found!</h1>
+      <p style="color: var(--gray)"> The page you're looking for does not seem to exist. </p>
+    </div>
   </body>
 
 </html>

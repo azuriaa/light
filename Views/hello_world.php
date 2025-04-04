@@ -6,26 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hello World!</title>
-    <style>
-      body {
-        font-family: Helvetica;
-        text-align: center;
-        background-color: white;
-        margin: 0;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
-
-      h1 {
-        color: darkcyan;
-      }
-    </style>
+    <script>
+      <?php include 'resources/elegant_framework.js' ?>
+    </script>
   </head>
 
   <body>
-    <h1>Hello World!</h1>
+    <div class="container mt-5 mb-2">
+      <h1 style="color: var(--blue)">Hello World!</h1>
+      <p style="color: var(--gray)"> Let's make modern web appliaction. </p>
+    </div>
   </body>
 
 </html>
