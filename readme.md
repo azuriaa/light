@@ -1,7 +1,17 @@
 # Light
 PHP Project Boilerplate.
 
-## Prasyarat
+## Daftar Isi
+1. [Prasyarat](#prasyarat)
+2. [Konfigurasi](#konfigurasi)
+3. [Router](#router)
+4. [Middleware](#middleware)
+5. [Validator](#validator)
+6. [Model](#model)
+7. [Singleton](#singleton)
+8. [View](#view)
+
+##  Prasyarat
 1. Server Apache dengan mod_rewrite
 2. PHP 8.4 ke atas
 
@@ -354,14 +364,18 @@ class UserController {
 Template HTML & Javascript yang di bind dengan data lalu dirender ke client.
 
 ### Template Engine
-Saat ini modern web app sudah meninggalkan teknologi web dinamis dan beralih ke Single Page App (SPA), sehingga data dari controller tidak lagi dirender menggunakan 
+Saat ini modern web app sudah meninggalkan teknologi web dinamis dan beralih ke Single Page App (SPA), sehingga data dari controller tidak lagi dirender menggunakan
 ```php
 <?= $date ?>
 ```
 lagi misalnya untuk menampilkan date dari controller. Kebanyakan data diambil menggunakan REST API dan dirender oleh browser. Disinilah peran template engine, merubah yang awalnya server-side rendering menjadi client-side rendering.
 
+#### Lokasi File
+```/Views/resources/template_engine.js```
+
 #### Contoh
 ```javascript
+// Menyisipkan template engine file
 <?php include 'resources/template_engine.js' ?>
 
 const engine = new TemplateEngine();
@@ -438,7 +452,10 @@ engine.render(app, template, data);
 ### Hash Router
 Template engine tadi dapat juga dikombinasikan dengan client-side router
 
-#### Contoh Lengkap
+#### Lokasi File
+```/Views/resources/hash_router.js```
+
+#### Contoh
 ```html
 <!DOCTYPE html>
 <html>
@@ -538,7 +555,7 @@ data: (params) => fetch('/api/data').then(...)
 ### REST Client
 Template engine dan router tadi juga dapat dikombinasikan dengan ini sehingga pemanggilan API lebih ringkas dibandingkan manual menggunakan fetch.
 
-#### Contoh Lengkap
+#### Contoh
 ```html
 <!DOCTYPE html>
 <html>
@@ -611,6 +628,10 @@ Template engine dan router tadi juga dapat dikombinasikan dengan ini sehingga pe
 
 #### Contoh Upload File
 Selain bentuk teks/json, file juga dapat dikirim
+
+#### Lokasi File
+```/Views/resources/rest_client.js```
+
 ```javascript
 // Dalam event handler atau komponen
 const fileInput = document.getElementById('avatar-upload');
@@ -627,7 +648,7 @@ fileInput.addEventListener('change', async (e) => {
 });
 ```
 
-#### Fitur
+#### Fitur Utama
 Konfigurasi Fleksibel:
 - Base URL yang dapat dikonfigurasi
 - Header default yang dapat disesuaikan
@@ -644,3 +665,84 @@ Response Handling:
 HTTP Methods Lengkap:
 - GET, POST, PUT, PATCH, DELETE
 
+### Elegant CSS Frammework
+Style CSS yang dirangkum menjadi 1 file javascript
+
+#### Lokasi File
+``` /Views/resources/elegant_framework.js ```
+
+#### Contoh
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>My App</title>
+  <!-- Menyisipkan Elegant Framework -->
+  <script><?php include 'resources/elegant_framework.js' ?></script>
+</head>
+<body>
+  <!-- Contoh penggunaan komponen -->
+  <button class="btn btn-blue" data-toggle="dialog" data-target="#myDialog">
+    Open Dialog
+  </button>
+
+  <div class="dropdown">
+    <button class="dropdown-toggle">
+      Dropdown Menu
+    </button>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="#">Item 1</a></li>
+      <li><a class="dropdown-item" href="#">Item 2</a></li>
+    </ul>
+  </div>
+
+  <div class="circular-progress" data-circular-progress data-value="75"></div>
+
+  <!-- Dialog -->
+  <div id="myDialog-backdrop" class="dialog-backdrop"></div>
+  <div id="myDialog" class="dialog">
+    <div class="dialog-box">
+      <div class="dialog-content">
+        <div class="dialog-header">
+          <h5 class="dialog-title">Dialog Title</h5>
+          <button class="dialog-close">&times;</button>
+        </div>
+        <div class="dialog-body">
+          <p>Dialog content goes here</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Contoh penggunaan snackbar
+    setTimeout(() => {
+      ElegantSnackbar.show({
+        message: 'Action completed successfully!',
+        type: 'snackbar-green',
+        autoDismiss: 3000
+      });
+    }, 1000);
+  </script>
+</body>
+</html>
+```
+
+#### Fitur Utama
+Complete Component Set
+- Layout system (container, grid)
+- Typography
+- Buttons
+- Forms
+- Cards
+- Dropdowns
+- Dialogs (modals)
+- Snackbars/toasts
+- Circular progress indicators
+
+Responsive Design
+- Bekerja di semua ukuran layar
+
+Easy Theming
+- Warna dapat disesuaikan melalui variabel CSS
