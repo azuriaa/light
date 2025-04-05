@@ -88,9 +88,9 @@ class HashRouter {
     }
 
     if (route.template) {
-      this.engine.render(this.root, route.template, data);
+      this.engine.render(route.template, data, this.root);
     } else if (route.component) {
-      this.engine.render(this.root, `@component ${route.component}@endcomponent`, data);
+      this.engine.render(`<${route.component} />`, data, this.root);
     }
   }
 

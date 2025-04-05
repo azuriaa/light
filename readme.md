@@ -672,9 +672,7 @@ engine.registerComponent('UserCard', `
 Penggunaan Komponen:
 
 ```html
-@component UserCard(user: currentUser)
-  <p>Additional info here</p>
-@endcomponent
+<UserCard />
 ```
 
 #### Hash Router
