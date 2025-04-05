@@ -21,10 +21,6 @@ class HashRouter {
 
     const { route, params } = matchedRoute;
 
-    if (this.currentRoute && this.currentRoute.path === route.path) {
-      return; // Skip jika route sama
-    }
-
     this.currentRoute = route;
     this.currentParams = params;
 
