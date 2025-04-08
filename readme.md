@@ -396,52 +396,6 @@ Tambahkan satu baris kode berikut di <head> HTML Anda:
 <script><?php include 'resources/elegant_framework.js' ?></script>
 ```
 
-#### Grid System
-
-Membuat layout responsif dengan sistem grid 12 kolom.
-
-```html
-<div class="container">
-  <div class="row">
-    <div class="col-md-6">Kolom 1 (6/12)</div>
-    <div class="col-md-6">Kolom 2 (6/12)</div>
-  </div>
-</div>
-```
-
-Class yang tersedia:
-
-- ```col-1``` sampai ```col-12``` untuk lebar spesifik
-- ```col-md-*```, ```col-lg-*``` untuk breakpoint berbeda
-- ```col``` untuk pembagian otomatis
-
-#### Responsive Images
-
-Menampilkan gambar yang menyesuaikan dengan perangkat.
-
-```html
-<!-- Gambar dasar -->
-<img src="image.jpg" class="img-fluid" alt="Responsive">
-
-<!-- Gambar dengan aspect ratio 16:9 -->
-<div class="ratio ratio-16x9">
-  <img src="image.jpg" class="img-cover" alt="Cover">
-</div>
-
-<!-- Gallery -->
-<div class="gallery">
-  <img src="image1.jpg" alt="Photo 1">
-  <img src="image2.jpg" alt="Photo 2">
-</div>
-```
-
-Class yang tersedia:
-
-- ```img-fluid```: Gambar responsif dasar
-- ```img-cover```, img-contain: Penyesuaian gambar
-- ```img-thumbnail```, ```img-rounded```, ```img-circle```: Gaya gambar
-- ```ratio-*```: Kontrol aspek rasio (1x1, 4x3, 16x9, 21x9)
-
 #### Animation
 
 - ```fade-in```: Animasi fade in
@@ -516,6 +470,18 @@ Varian Warna:
 - ```red```
 - ```beige```
 
+#### Customization
+
+Anda bisa menyesuaikan variabel CSS di dalam file JavaScript:
+
+```javascript
+:root {
+  --blue: #3498db;       // Warna primary
+  --border-radius: 4px;  // Border radius
+  // ... variabel lainnya
+}
+```
+
 #### Dialog (Modal)
 
 ```html
@@ -538,6 +504,72 @@ Varian Warna:
   </div>
 </div>
 ```
+
+#### Dropdown
+
+Dropdown digunakan untuk menampilkan daftar opsi saat interaksi (klik/hover).
+
+``` html
+<div class="dropdown">
+  <!-- Tombol Trigger -->
+  <button class="dropdown-toggle">
+    Pilih Opsi
+  </button>
+  
+  <!-- Menu Dropdown -->
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="#">Opsi 1</a></li>
+    <li><a class="dropdown-item" href="#">Opsi 2</a></li>
+    <li><a class="dropdown-item" href="#">Opsi 3</a></li>
+  </ul>
+</div>
+```
+
+#### Grid System
+
+Membuat layout responsif dengan sistem grid 12 kolom.
+
+```html
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">Kolom 1 (6/12)</div>
+    <div class="col-md-6">Kolom 2 (6/12)</div>
+  </div>
+</div>
+```
+
+Class yang tersedia:
+
+- ```col-1``` sampai ```col-12``` untuk lebar spesifik
+- ```col-md-*```, ```col-lg-*``` untuk breakpoint berbeda
+- ```col``` untuk pembagian otomatis
+
+#### Responsive Images
+
+Menampilkan gambar yang menyesuaikan dengan perangkat.
+
+```html
+<!-- Gambar dasar -->
+<img src="image.jpg" class="img-fluid" alt="Responsive">
+
+<!-- Gambar dengan aspect ratio 16:9 -->
+<div class="ratio ratio-16x9">
+  <img src="image.jpg" class="img-cover" alt="Cover">
+</div>
+
+<!-- Gallery -->
+<div class="gallery">
+  <img src="image1.jpg" alt="Photo 1">
+  <img src="image2.jpg" alt="Photo 2">
+</div>
+```
+
+Class yang tersedia:
+
+- ```img-fluid```: Gambar responsif dasar
+- ```img-cover```, img-contain: Penyesuaian gambar
+- ```img-thumbnail```, ```img-rounded```, ```img-circle```: Gaya gambar
+- ```ratio-*```: Kontrol aspek rasio (1x1, 4x3, 16x9, 21x9)
 
 #### Snackbar/Toast
 
@@ -568,18 +600,6 @@ Tipe Snackbar:
 - ```text-left```
 - ```text-center```
 - ```text-right```
-
-#### Customization
-
-Anda bisa menyesuaikan variabel CSS di dalam file JavaScript:
-
-```javascript
-:root {
-  --blue: #3498db;       // Warna primary
-  --border-radius: 4px;  // Border radius
-  // ... variabel lainnya
-}
-```
 
 ### Single Page Aplication (SPA)
 
