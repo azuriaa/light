@@ -601,6 +601,35 @@ Tipe Snackbar:
 - ```text-center```
 - ```text-right```
 
+### SVG Icons
+
+#### Lokasi Library
+
+```/Views/resources/icons.js```
+
+#### Load Library
+
+Sertakan file JavaScript di HTML Anda:
+
+```php
+<script><?php include 'resources/icons.js' ?></script>
+```
+
+#### Cara Penggunaan
+
+Panggil ikon dengan tag ```<icon>```:
+
+```html
+<icon name="settings"></icon>
+<icon name="heart" color="red" size="32"></icon>
+```
+
+Untuk menambahkan ikon custom Anda sendiri, cukup tambahkan entri baru ke objek icons dengan format:
+
+```javascript
+'nama-icon': `<path d="path-data-svg"/>`
+```
+
 ### Single Page Aplication (SPA)
 
 Template engine, client-side router, dan REST client.
