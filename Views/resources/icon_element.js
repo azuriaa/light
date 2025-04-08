@@ -18,9 +18,10 @@ class IconElement extends HTMLElement {
         svg {
           width: ${size}px;
           height: ${size}px;
+          fill: ${color};
         }
       </style>
-      ${this.getIconSvg(iconName, color)}
+      ${this.getIconSvg(iconName)}
     `;
   }
 
@@ -64,11 +65,6 @@ class IconElement extends HTMLElement {
       'send': `<path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>`,
       'chat': `<path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>`,
 
-      // Teknologi
-      'wifi': `<path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/>`,
-      'bluetooth': `<path d="M17.71 7.71L12 2h-1v7.59L6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 11 14.41V22h1l5.71-5.71-4.3-4.29 4.3-4.29zM13 5.83l1.88 1.88L13 9.59V5.83zm1.88 10.46L13 18.17v-3.76l1.88 1.88z"/>`,
-      'battery': `<path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/>`,
-
       // Fallback (jika ikon tidak ditemukan)
       'warning': `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>`
     };
@@ -81,4 +77,5 @@ class IconElement extends HTMLElement {
   }
 }
 
-customElements.define('icon', IconElement);
+// Registrasi dengan nama <icon-element>
+customElements.define('icon-element', IconElement);

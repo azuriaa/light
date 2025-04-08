@@ -601,27 +601,27 @@ Tipe Snackbar:
 - ```text-center```
 - ```text-right```
 
-### SVG Icons
+### Icon Element
 
 #### Lokasi Library
 
-```/Views/resources/icons.js```
+```/Views/resources/icon_element.js```
 
 #### Load Library
 
 Sertakan file JavaScript di HTML Anda:
 
 ```php
-<script><?php include 'resources/icons.js' ?></script>
+<script><?php include 'resources/icon_element.js' ?></script>
 ```
 
 #### Cara Penggunaan
 
-Panggil ikon dengan tag ```<icon>```:
+Panggil ikon dengan tag ```<icon-element>```:
 
 ```html
-<icon name="settings"></icon>
-<icon name="heart" color="red" size="32"></icon>
+<icon-element name="settings"></icon-element>
+<icon-element name="heart" color="red" size="32"></icon-element>
 ```
 
 Untuk menambahkan ikon custom Anda sendiri, cukup tambahkan entri baru ke objek icons dengan format:
