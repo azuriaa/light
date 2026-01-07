@@ -766,3 +766,31 @@ router.navigate('/about');
 <a href="#/about">Tentang Kami</a>
 <button onclick="router.navigate('/contact')">Kontak</button>
 ```
+
+#### REST Client
+
+```javascript
+
+// Buat instance
+const api = createClient({
+  baseURL: 'https://api.example.com',
+  timeout: 10000
+});
+
+// GET request
+const users = await api.get('/users');
+
+// POST request
+const newUser = await api.post('/users', {
+  name: 'John',
+  email: 'john@example.com'
+});
+
+// Dengan error handling
+try {
+  const response = await api.get('/users');
+  console.log(response.data);
+} catch (error) {
+  console.error('Error:', error.message, error.status);
+}
+```
