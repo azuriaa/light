@@ -632,20 +632,18 @@ Untuk menambahkan ikon custom Anda sendiri, cukup tambahkan entri baru ke objek 
 
 ### Single Page Aplication (SPA)
 
-Template engine, client-side router, dan REST client.
+Template engine, dan client-side router.
 
 #### Lokasi Library
 
 - Template Engine: ```/Views/resources/template_engine.js```
 - Hash Router: ```/Views/resources/hash_router.js```
-- REST Client: ```/Views/resources/rest_client.js```
 
 #### Load Library
 
 ```php
 <script><?php include 'resources/template_engine.js' ?></script>
 <script><?php include 'resources/hash_router.js' ?></script>
-<script><?php include 'resources/rest_client.js' ?></script>
 ```
 
 #### Inisialisasi
@@ -656,17 +654,6 @@ const engine = new TemplateEngine({
   // Opsi konfigurasi (opsional)
   delimiters: { start: '{{', end: '}}' },
   bindPrefix: 'bind:'
-});
-
-// Buat instance REST Client
-const api = new RestClient('https://api.example.com', {
-  headers: {
-    'X-Requested-With': 'XMLHttpRequest'
-  },
-  errorHandler: (error) => {
-    console.error('API Error:', error);
-    alert(`Error: ${error.message}`);
-  }
 });
 
 // Definisikan rute aplikasi
@@ -769,6 +756,16 @@ router.navigate('/about');
 
 #### REST Client
 
+Lokasi Library
+
+```/Views/resources/rest_client.js```
+
+Load Library
+
+```php
+<script><?php include 'resources/rest_client.js' ?></script>
+```
+
 ```javascript
 
 // Buat instance
@@ -794,3 +791,4 @@ try {
   console.error('Error:', error.message, error.status);
 }
 ```
+
