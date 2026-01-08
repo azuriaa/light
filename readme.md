@@ -747,11 +747,11 @@ Navigasi:
 
 ```javascript
 // Navigasi dalam JavaScript
-router.navigate('/about');
+router.navigateTo('/about');
 
 // Navigasi dalam template
 <a href="#/about">Tentang Kami</a>
-<button onclick="router.navigate('/contact')">Kontak</button>
+<button onclick="router.navigateTo('/contact')">Kontak</button>
 ```
 
 #### REST Client
@@ -791,4 +791,5 @@ try {
   console.error('Error:', error.message, error.status);
 }
 ```
+
 
