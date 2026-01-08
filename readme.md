@@ -525,6 +525,17 @@ Dropdown digunakan untuk menampilkan daftar opsi saat interaksi (klik/hover).
 </div>
 ```
 
+#### Form Input
+
+Membuat form input lebih estetik
+
+```html
+Input teks
+<input class="form-control">
+Input password
+<input type="password" class="form-control">
+```
+
 #### Grid System
 
 Membuat layout responsif dengan sistem grid 12 kolom.
