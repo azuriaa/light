@@ -32,11 +32,11 @@ abstract class Model
   public function find($id): array
   {
     $connection = $this->connect();
-    $connection
-      ->prepare("SELECT * FROM $this->table WHERE $this->primaryKey = ?")
-      ->execute([$id]);
+    $stmt = $connection
+      ->prepare("SELECT * FROM $this->table WHERE $this->primaryKey = ?");
+    $stmt->execute([$id]);
 
-    return $connection->fetchAll();
+    return $stmt->fetchAll();
   }
 
   public function insert(array $data): bool
