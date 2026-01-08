@@ -164,6 +164,24 @@
     }
   }
 
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  thead {
+    text-align: left;
+    background-color: #000000ff;
+    color: white;
+  }
+
+  th, td {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+  }
+
+  tr:nth-child(even) {background-color: #ffffffff;}
+
   .row {
     display: flex;
     flex-wrap: wrap;
