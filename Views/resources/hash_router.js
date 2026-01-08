@@ -79,7 +79,7 @@ class HashRouter {
 
   renderRoute(route, data) {
     if (route.redirect) {
-      this.navigate(route.redirect);
+      this.navigateTo(route.redirect);
       return;
     }
 
@@ -101,7 +101,6 @@ class HashRouter {
 
   navigateTo(path) {
     window.location.hash = path;
-    window.location.reload();
   }
 
   getCurrentParams() {
