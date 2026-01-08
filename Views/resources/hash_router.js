@@ -99,8 +99,9 @@ class HashRouter {
     }
   }
 
-  navigate(path) {
+  navigateTo(path) {
     window.location.hash = path;
+    window.location.reload();
   }
 
   getCurrentParams() {
