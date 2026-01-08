@@ -465,7 +465,6 @@
 
   .dialog-close:hover {
     color: var(--black);
-    transform: rotate(90deg);
   }
 
   .dialog-body {
