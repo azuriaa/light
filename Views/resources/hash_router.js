@@ -88,6 +88,12 @@ class HashRouter {
     } else if (route.component) {
       this.engine.render(`<${route.component} />`, data, this.root);
     }
+
+    try {
+      window.ElegantFramework.reinit();
+    } catch (e) {
+      console.error('Error during Elegant Framework reinit:', e);
+    }
   }
 
   show404() {

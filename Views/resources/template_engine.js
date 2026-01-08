@@ -27,6 +27,7 @@ class TemplateEngine {
       const cacheKey = this._generateCacheKey(templateStr, data);
 
       if (this._templateCache.has(cacheKey)) {
+        console.log('Using cached template for key:', cacheKey);
         const cached = this._templateCache.get(cacheKey);
         if (container && this._isDOMElement(container)) {
           container.innerHTML = cached;

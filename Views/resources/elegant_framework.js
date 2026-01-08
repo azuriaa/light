@@ -1,5 +1,61 @@
 // Elegant CSS Framework - Complete Implementation with Helvetica
 (function () {
+  let isInitialized = false;
+
+  function initializeFramework() {
+    if (isInitialized) return;
+    
+    // 1. Inject Styles (hanya sekali)
+    const style = document.createElement('style');
+    style.id = 'elegant-css-framework';
+    style.textContent = cssContent; // CSS content seperti sebelumnya
+    document.head.appendChild(style);
+    
+    // 2. Initialize Components
+    initializeComponents();
+    isInitialized = true;
+  }
+  
+  // Fungsi untuk reinitialize components saja
+  function reinitializeComponents() {
+    // Cleanup event listeners lama
+    cleanupEventListeners();
+    
+    // Initialize ulang semua komponen
+    initializeComponents();
+  }
+  
+  // Fungsi untuk cleanup event listeners
+  function cleanupEventListeners() {
+    // Remove semua snackbar
+    document.querySelectorAll('.snackbar-container').forEach(el => el.remove());
+    
+    // Close semua dialog
+    document.querySelectorAll('.dialog.show').forEach(dialog => {
+      dialog.classList.remove('show');
+      document.getElementById(dialog.id + '-backdrop').classList.remove('show');
+    });
+    
+    // Remove semua circular progress SVG
+    document.querySelectorAll('.circular-progress-svg').forEach(svg => svg.remove());
+    
+    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+      const newToggle = toggle.cloneNode(true);
+      toggle.parentNode.replaceChild(newToggle, toggle);
+    });
+    
+    document.querySelectorAll('[data-toggle="dialog"]').forEach(toggle => {
+      const newToggle = toggle.cloneNode(true);
+      toggle.parentNode.replaceChild(newToggle, toggle);
+    });
+  }
+  
+  // Ekspos fungsi ke global scope
+  window.ElegantFramework = {
+    init: initializeFramework,
+    reinit: reinitializeComponents
+  };
+
   // =============================================
   // 1. STYLE INJECTION
   // =============================================
@@ -786,11 +842,11 @@
   // 2. COMPONENT INITIALIZATION
   // =============================================
 
-  // Initialize when DOM is loaded
+  // Auto-initialize saat pertama kali load
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeComponents);
+    document.addEventListener('DOMContentLoaded', initializeFramework);
   } else {
-    initializeComponents();
+    initializeFramework();
   }
 
   function initializeComponents() {
