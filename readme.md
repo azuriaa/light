@@ -3,6 +3,7 @@
 PHP Boilerplate.
 
 ## Daftar Isi
+
 1. [Persyaratan Sistem](#persyaratan-sistem)
 2. [Konfigurasi](#konfigurasi)
 3. [Router](#router)
@@ -12,21 +13,21 @@ PHP Boilerplate.
 7. [Singleton](#singleton)
 8. [View](#view)
 
-##  Persyaratan Sistem
+## Persyaratan Sistem
 
 1. Server Apache dengan mod_rewrite
 2. PHP 8.4 ke atas
 
 ## Konfigurasi
 
-Front controller berada di ```/public/index.php```. Ubah dan arahkan ke root folder project yang ditentukan jika perlu.
+Front controller berada di `/public/index.php`. Ubah dan arahkan ke root folder project yang ditentukan jika perlu.
 
 ```php
 // misalnya
 $path = '/../project-1/';
 ```
 
-Lalu atur juga konfigurasi pada ```/Config/server.php``` jika diperlukan.
+Lalu atur juga konfigurasi pada `/Config/server.php` jika diperlukan.
 Saat environtment berubah, konfigurasi file tersebut juga perlu diubah.
 
 ```php
@@ -45,7 +46,8 @@ $_ENV['DB_DEFAULT'] = [
 ```
 
 ## Router
-Route dapat diatur pada ```/Config/router.php```.
+
+Route dapat diatur pada `/Config/router.php`.
 
 ```php
 Router::add('/page', function () {
@@ -68,7 +70,7 @@ Router::add('/12', function () {
 Cara kerjanya adalah hanya sederhana, hanya mencocokkan string tanpa tanda slash "/", jadi kelemahanya tidak bisa meregister nama route dengan slash. Meski begitu string slash berikutnya akan dijadikan params callback route.
 Meskipun callback bisa diisi apapun, namun akan lebih baik jika diarahkan ke controller.
 
-Misalnya URL ```http://localhost/user/example```
+Misalnya URL `http://localhost/user/example`
 
 ```php
 Router::add('/user', function ($id = null) {
@@ -76,21 +78,21 @@ Router::add('/user', function ($id = null) {
 });
 ```
 
-Hasilnya adalah route ```/user```, dan ```$id``` akan berisi ```example```.
+Hasilnya adalah route `/user`, dan `$id` akan berisi `example`.
 
 Router akan mencoba memanggil controller sesuai dengan request method.
 
-- ```GET``` dengan ```$id``` null akan memanggil method ```index()```
-- ```GET``` dengan ```$id``` terisi akan memanggil method ```show($id)```
-- ```POST``` akan memanggil method ```create()```
-- ```PUT``` atau ```PATCH``` akan memanggil method ```update($id)```
-- ```DELETE``` akan memanggil method ```delete($id)```
+- `GET` dengan `$id` null akan memanggil method `index()`
+- `GET` dengan `$id` terisi akan memanggil method `show($id)`
+- `POST` akan memanggil method `create()`
+- `PUT` atau `PATCH` akan memanggil method `update($id)`
+- `DELETE` akan memanggil method `delete($id)`
 
 ## Controller
 
 Controller adalah inti logic dari aplikasi kita sedangkan
-View adalah template halaman HTML, yang defaultnya berada pada direktori ```/Views/```. Cara memanggilnya seperti di bawah ini.
-Misalnya mengirim data ```date``` secara dinamis dari controller untuk dirender pada view.
+View adalah template halaman HTML, yang defaultnya berada pada direktori `/Views/`. Cara memanggilnya seperti di bawah ini.
+Misalnya mengirim data `date` secara dinamis dari controller untuk dirender pada view.
 
 ```php
 namespace Controllers;
@@ -109,7 +111,7 @@ class UserController extends Controller {
 
 ```
 
-Misalnya view berupa ```/Views/dashboard.php```:
+Misalnya view berupa `/Views/dashboard.php`:
 
 ```php
 <?= $date ?>
@@ -123,13 +125,13 @@ Contoh form data pada view
 
 ```html
 <form method="get">
-    Username:
-    <input type="text" name="username">
-    <button type="submit">Submit</button>
+  Username:
+  <input type="text" name="username" />
+  <button type="submit">Submit</button>
 </form>
 ```
 
-input form dengan nama form ```username``` dapat diterima pada controller seperti di bawah
+input form dengan nama form `username` dapat diterima pada controller seperti di bawah
 
 ```php
 $username = $this->getVar('username');
@@ -141,24 +143,27 @@ Contoh form upload file pada view
 
 ```html
 <form method="post" enctype="multipart/form-data">
-    File:
-    <input type="file" name="upload">
-    <button type="submit">Submit</button>
+  File:
+  <input type="file" name="upload" />
+  <button type="submit">Submit</button>
 </form>
 ```
-file dengan nama form ```upload``` dapat diterima seperti di bawah
+
+file dengan nama form `upload` dapat diterima seperti di bawah
+
 ```php
 $filename = $this->upload->save('upload');
 ```
-```$filename``` akan berisi nama file pada direktori ```/Storage/Upload/```
+
+`$filename` akan berisi nama file pada direktori `/Storage/Upload/`
 
 ## Middleware
 
 Middleware adalah perantara request/response menuju business layer, tapi
-di PHP middleware biasanya hanya untuk membuat event sebelum dan sesudah mengakses controller yang berada pada direktori misalnya ```/Middlewares/```.
+di PHP middleware biasanya hanya untuk membuat event sebelum dan sesudah mengakses controller yang berada pada direktori misalnya `/Middlewares/`.
 
-Misalnya, untuk membatasi akses dashboard dengan login session, maka perlu membuat file 
-```DashboardMiddleware.php```
+Misalnya, untuk membatasi akses dashboard dengan login session, maka perlu membuat file
+`DashboardMiddleware.php`
 kurang lebih seperti di bawah ini.
 
 ```php
@@ -183,7 +188,7 @@ class DashboardMiddleware
 }
 ```
 
-Lalu dapat dipasangkan pada ```/Config/router.php```.
+Lalu dapat dipasangkan pada `/Config/router.php`.
 
 ```php
 // menggunakan controller loader
@@ -250,11 +255,11 @@ Optional untuk batasan suatu data input, jika berupa string maka menjadi panjang
 
 Kedua param ini akan diabaikan untuk pattern bool, date, email, ip dan url.
 
-***Note**: Param min hanya akan bekerja jika param max juga diisi.*
+**\*Note**: Param min hanya akan bekerja jika param max juga diisi.\*
 
 ## Model
 
-Model dibuat agar alur kerja interaksi ke database menjadi terpola dan terstruktur. Secara default berada pada direktori ```/Models/```, misalnya akan membuat model untuk tabel User maka akan dibuat file ```UserModel.php```
+Model dibuat agar alur kerja interaksi ke database menjadi terpola dan terstruktur. Secara default berada pada direktori `/Models/`, misalnya akan membuat model untuk tabel User maka akan dibuat file `UserModel.php`
 
 ```php
 namespace Models;
@@ -317,8 +322,8 @@ $result = $db->fetchAll();
 ### Menggunakan Konfigurasi Berbeda
 
 Untuk menggunakan konfigurasi lebih dari 1,
-cukup tambahkan konfigurasi baru pada variabel ```$_ENV```
-pada ```/Config/server.php```.
+cukup tambahkan konfigurasi baru pada variabel `$_ENV`
+pada `/Config/server.php`.
 
 ```php
 $_ENV['DB_DEFAULT'] = [
@@ -327,7 +332,7 @@ $_ENV['DB_DEFAULT'] = [
     'password' => '',
 ];
 
-// Misalnya ini akan digunakan 
+// Misalnya ini akan digunakan
 $_ENV['CONTOH_DATABASE'] = [
     'dsn' => 'mysql:dbname=example_db;host=192.168.0.2',
     'username' => 'user',
@@ -387,19 +392,20 @@ Elegant CSS Framework adalah framework CSS modern yang ringan dan elegan, dibang
 
 #### Lokasi Library
 
-```/Views/resources/elegant_framework.js```
+`/Views/resources/elegant_framework.js`
 
 #### Load Library
 
 Tambahkan satu baris kode berikut di <head> HTML Anda:
+
 ```php
 <script><?php include 'resources/elegant_framework.js' ?></script>
 ```
 
 #### Animation
 
-- ```fade-in```: Animasi fade in
-- ```rotate```: Animasi putar
+- `fade-in`: Animasi fade in
+- `rotate`: Animasi putar
 
 #### Button
 
@@ -410,10 +416,10 @@ Tambahkan satu baris kode berikut di <head> HTML Anda:
 
 Varian Warna:
 
-- ```btn-blue```
-- ```btn-green```
-- ```btn-yellow```
-- ```btn-red```
+- `btn-blue`
+- `btn-green`
+- `btn-yellow`
+- `btn-red`
 
 #### Card
 
@@ -439,13 +445,14 @@ Penggunaan Dasar:
 Dengan Atribut:
 
 ```html
-<div class="circular-progress" 
-     data-circular-progress
-     data-value="50"
-     data-max="100"
-     data-color="blue"
-     data-size="large">
-</div>
+<div
+  class="circular-progress"
+  data-circular-progress
+  data-value="50"
+  data-max="100"
+  data-color="blue"
+  data-size="large"
+></div>
 ```
 
 Dengan Teks:
@@ -464,11 +471,11 @@ Indeterminate Progress (Spinner Loading):
 
 Varian Warna:
 
-- ```blue``` (default)
-- ```green```
-- ```yellow```
-- ```red```
-- ```beige```
+- `blue` (default)
+- `green`
+- `yellow`
+- `red`
+- `beige`
 
 #### Customization
 
@@ -509,13 +516,11 @@ Anda bisa menyesuaikan variabel CSS di dalam file JavaScript:
 
 Dropdown digunakan untuk menampilkan daftar opsi saat interaksi (klik/hover).
 
-``` html
+```html
 <div class="dropdown">
   <!-- Tombol Trigger -->
-  <button class="dropdown-toggle">
-    Pilih Opsi
-  </button>
-  
+  <button class="dropdown-toggle">Pilih Opsi</button>
+
   <!-- Menu Dropdown -->
   <ul class="dropdown-menu">
     <li><a class="dropdown-item" href="#">Opsi 1</a></li>
@@ -531,9 +536,9 @@ Membuat form input lebih estetik
 
 ```html
 Input teks
-<input class="form-control">
+<input class="form-control" />
 Input password
-<input type="password" class="form-control">
+<input type="password" class="form-control" />
 ```
 
 #### Grid System
@@ -551,9 +556,9 @@ Membuat layout responsif dengan sistem grid 12 kolom.
 
 Class yang tersedia:
 
-- ```col-1``` sampai ```col-12``` untuk lebar spesifik
-- ```col-md-*```, ```col-lg-*``` untuk breakpoint berbeda
-- ```col``` untuk pembagian otomatis
+- `col-1` sampai `col-12` untuk lebar spesifik
+- `col-md-*`, `col-lg-*` untuk breakpoint berbeda
+- `col` untuk pembagian otomatis
 
 #### Responsive Images
 
@@ -561,26 +566,26 @@ Menampilkan gambar yang menyesuaikan dengan perangkat.
 
 ```html
 <!-- Gambar dasar -->
-<img src="image.jpg" class="img-fluid" alt="Responsive">
+<img src="image.jpg" class="img-fluid" alt="Responsive" />
 
 <!-- Gambar dengan aspect ratio 16:9 -->
 <div class="ratio ratio-16x9">
-  <img src="image.jpg" class="img-cover" alt="Cover">
+  <img src="image.jpg" class="img-cover" alt="Cover" />
 </div>
 
 <!-- Gallery -->
 <div class="gallery">
-  <img src="image1.jpg" alt="Photo 1">
-  <img src="image2.jpg" alt="Photo 2">
+  <img src="image1.jpg" alt="Photo 1" />
+  <img src="image2.jpg" alt="Photo 2" />
 </div>
 ```
 
 Class yang tersedia:
 
-- ```img-fluid```: Gambar responsif dasar
-- ```img-cover```, img-contain: Penyesuaian gambar
-- ```img-thumbnail```, ```img-rounded```, ```img-circle```: Gaya gambar
-- ```ratio-*```: Kontrol aspek rasio (1x1, 4x3, 16x9, 21x9)
+- `img-fluid`: Gambar responsif dasar
+- `img-cover`, img-contain: Penyesuaian gambar
+- `img-thumbnail`, `img-rounded`, `img-circle`: Gaya gambar
+- `ratio-*`: Kontrol aspek rasio (1x1, 4x3, 16x9, 21x9)
 
 #### Snackbar/Toast
 
@@ -589,34 +594,34 @@ Class yang tersedia:
 ElegantSnackbar.show({
   message: "Operasi berhasil!",
   type: "snackbar-green",
-  autoDismiss: 3000
+  autoDismiss: 3000,
 });
 ```
 
 Tipe Snackbar:
 
-- ```snackbar-blue```
-- ```snackbar-green```
-- ```snackbar-yellow```
-- ```snackbar-red```
+- `snackbar-blue`
+- `snackbar-green`
+- `snackbar-yellow`
+- `snackbar-red`
 
 #### spacing
 
-- ```mt-1``` sampai ```mt-5```: Margin top
-- ```mb-1``` sampai ```mb-5```: Margin bottom
-- ```p-1``` sampai ```p-5```: Padding
+- `mt-1` sampai `mt-5`: Margin top
+- `mb-1` sampai `mb-5`: Margin bottom
+- `p-1` sampai `p-5`: Padding
 
 #### Text Alignment
 
-- ```text-left```
-- ```text-center```
-- ```text-right```
+- `text-left`
+- `text-center`
+- `text-right`
 
 ### Icon Element
 
 #### Lokasi Library
 
-```/Views/resources/icon_element.js```
+`/Views/resources/icon_element.js`
 
 #### Load Library
 
@@ -628,7 +633,7 @@ Sertakan file JavaScript di HTML Anda:
 
 #### Cara Penggunaan
 
-Panggil ikon dengan tag ```<icon-element>```:
+Panggil ikon dengan tag `<icon-element>`:
 
 ```html
 <icon-element name="settings"></icon-element>
@@ -647,8 +652,8 @@ Template engine, dan client-side router.
 
 #### Lokasi Library
 
-- Template Engine: ```/Views/resources/template_engine.js```
-- Hash Router: ```/Views/resources/hash_router.js```
+- Template Engine: `/Views/resources/template_engine.js`
+- Hash Router: `/Views/resources/hash_router.js`
 
 #### Load Library
 
@@ -661,23 +666,23 @@ Template engine, dan client-side router.
 
 ```javascript
 // Buat instance TemplateEngine
-const engine = new TemplateEngine({
+const engine = new ReactiveTemplateEngine({
   // Opsi konfigurasi (opsional)
-  delimiters: { start: '{{', end: '}}' },
-  bindPrefix: 'bind:'
+  delimiters: { start: "{{", end: "}}" },
+  bindPrefix: "bind:",
 });
 
 // Definisikan rute aplikasi
 const routes = [
   {
-    path: '/',
-    template: '<h1>Halaman Utama</h1>'
+    path: "/",
+    template: "<h1>Halaman Utama</h1>",
   },
   // ... rute lainnya
 ];
 
 // Buat instance router
-const router = new HashRouter(engine, routes, document.getElementById('app'));
+const router = new HashRouter(engine, routes, document.getElementById("app"));
 ```
 
 #### Template Engine
@@ -689,31 +694,34 @@ Sintaks Dasar:
 <p>{{ user.name }}</p>
 
 <!-- Binding dua arah -->
-<input type="text" value="bind:user.name.input">
+<input type="text" value="bind:user.name.input" />
 
 <!-- Kondisional -->
 @if user.isAdmin
-  <p>Anda adalah admin</p>
+<p>Anda adalah admin</p>
 @else
-  <p>Anda adalah user biasa</p>
+<p>Anda adalah user biasa</p>
 @endif
 
 <!-- Perulangan -->
 @foreach products as product
-  <div>{{ product.name }}</div>
+<div>{{ product.name }}</div>
 @endforeach
 ```
 
 Registrasi Komponen:
 
 ```javascript
-engine.registerComponent('UserCard', `
+engine.registerComponent(
+  "UserCard",
+  `
   <div class="card">
     <h3>{{ user.name }}</h3>
     <p>{{ user.email }}</p>
     {{ slot }}
   </div>
-`);
+`
+);
 ```
 
 Penggunaan Komponen:
@@ -729,28 +737,28 @@ Membuat Route:
 ```javascript
 const routes = [
   {
-    path: '/',
-    template: '<h1>Beranda</h1>'
+    path: "/",
+    template: "<h1>Beranda</h1>",
   },
   {
-    path: '/about',
-    component: 'AboutPage' // Komponen yang sudah diregistrasi
+    path: "/about",
+    component: "AboutPage", // Komponen yang sudah diregistrasi
   },
   {
-    path: '/users/:id',
-    data: async ({id}) => {
+    path: "/users/:id",
+    data: async ({ id }) => {
       const user = await api.get(`/users/${id}`);
       return { user };
     },
     template: `
       <h1>{{ user.name }}</h1>
       <p>{{ user.email }}</p>
-    `
+    `,
   },
   {
-    path: '404',
-    template: '<h1>Halaman tidak ditemukan</h1>'
-  }
+    path: "404",
+    template: "<h1>Halaman tidak ditemukan</h1>",
+  },
 ];
 ```
 
@@ -769,7 +777,7 @@ router.navigateTo('/about');
 
 Lokasi Library
 
-```/Views/resources/rest_client.js```
+`/Views/resources/rest_client.js`
 
 Load Library
 
@@ -778,29 +786,26 @@ Load Library
 ```
 
 ```javascript
-
 // Buat instance
 const api = createClient({
-  baseURL: 'https://api.example.com',
-  timeout: 10000
+  baseURL: "https://api.example.com",
+  timeout: 10000,
 });
 
 // GET request
-const users = await api.get('/users');
+const users = await api.get("/users");
 
 // POST request
-const newUser = await api.post('/users', {
-  name: 'John',
-  email: 'john@example.com'
+const newUser = await api.post("/users", {
+  name: "John",
+  email: "john@example.com",
 });
 
 // Dengan error handling
 try {
-  const response = await api.get('/users');
+  const response = await api.get("/users");
   console.log(response.data);
 } catch (error) {
-  console.error('Error:', error.message, error.status);
+  console.error("Error:", error.message, error.status);
 }
 ```
-
-
